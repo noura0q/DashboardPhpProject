@@ -1,0 +1,292 @@
+.AimsRegistrationDashboard {
+    width: 1440px;  /* Reduced from 1920px */
+    height: 2480px; /* Reduced from 3324px */
+    position: relative;
+    background: #F7F8FD;
+  }
+  
+  .Bg {
+    position: absolute;
+    background: white;
+  }
+  
+  .bg-1 {
+    width: 1440px;  /* Reduced from 1920px */
+    height: 74px;   /* Proportionally reduced */
+    left: 0px;
+    top: 0px;
+  }
+  
+  .bg-2 {
+    width: 915px;   /* Proportionally reduced */
+    height: 105px;  /* Proportionally reduced */
+    left: 505px;    /* Proportionally reduced */
+    top: 96px;      /* Proportionally reduced */
+    border-radius: 10px;
+  }
+  
+  .bg-3 {
+    width: 457px;   /* Proportionally reduced */
+    height: 105px;  /* Proportionally reduced */
+    left: 23px;     /* Proportionally reduced */
+    top: 96px;      /* Proportionally reduced */
+    border-radius: 10px;
+  }
+  
+  .Domains {
+    left: 918px;    /* Proportionally reduced */
+    top: 114px;     /* Proportionally reduced */
+    position: absolute;
+    color: black;
+    font-size: 18px; /* Proportionally reduced */
+    font-family: Poppins;
+    font-weight: 600;
+    word-wrap: break-word;
+  }
+  
+  .Group1171278483 {
+    height: 23px;  /* Proportionally reduced */
+    left: 665px;   /* Proportionally reduced */
+    top: 152px;    /* Proportionally reduced */
+    position: absolute;
+  }
+  
+  .Group1171278480, .Group1171278481, .Group1171278482 {
+    width: 65px;   /* Proportionally reduced */
+    height: 23px;  /* Proportionally reduced */
+    position: absolute;
+  }
+  
+  .Group1171278481 {
+    left: 178px;   /* Proportionally reduced */
+  }
+  
+  .Group1171278482 {
+    left: 343px;   /* Proportionally reduced */
+  }
+  
+  .Group1171278331 {
+    width: 23px;   /* Proportionally reduced */
+    height: 23px;  /* Proportionally reduced */
+    position: absolute;
+  }
+  
+  .Ellipse1162 {
+    width: 23px;   /* Proportionally reduced */
+    height: 23px;  /* Proportionally reduced */
+    position: absolute;
+    border-radius: 9999px;
+    border: 1.75px #00BC8B solid;
+  }
+  
+  .Ellipse1162.active {
+    background: #00BC8B;
+  }
+  
+  .Vector4 {
+    width: 11px;   /* Proportionally reduced */
+    height: 7.79px; /* Proportionally reduced */
+    position: absolute;
+    left: 5.63px;  /* Proportionally reduced */
+    top: 7.36px;   /* Proportionally reduced */
+    border: 2.20px #00BC8B solid;
+  }
+  
+  .Vector4.checked {
+    border-color: white;
+  }
+  
+  .Moe, .Hr, .Defense, .Others {
+    left: 34px;    /* Proportionally reduced */
+    top: 0px;
+    position: absolute;
+    opacity: 0.80;
+    color: black;
+    font-size: 15px; /* Proportionally reduced */
+    font-family: Poppins;
+    font-weight: 500;
+    word-wrap: break-word;
+  }
+  
+  .Group1171278479 {
+    width: 182px;  /* Proportionally reduced */
+    height: 65.63px; /* Proportionally reduced */
+    left: 175px;   /* Proportionally reduced */
+    top: 114px;    /* Proportionally reduced */
+    position: absolute;
+  }
+  
+  .LearnersRegistered, .LearnersEnrolled, .CertificateIssued, .LearnersActive, .LearnersInactive, .AvgTime {
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    color: black;
+    font-size: 18px; /* Proportionally reduced */
+    font-family: Poppins;
+    font-weight: 600;
+    word-wrap: break-word;
+  }
+  
+  .LearnerCount {
+    left: 35.63px;  /* Proportionally reduced */
+    top: 31.88px;   /* Proportionally reduced */
+    position: absolute;
+    color: black;
+    font-size: 23px; /* Proportionally reduced */
+    font-family: Poppins;
+    font-weight: 700;
+    word-wrap: break-word;
+  }
+  
+  .MsaiRegistrationDashboard {
+    left: 539px;    /* Proportionally reduced */
+    top: 19px;      /* Proportionally reduced */
+    position: absolute;
+    color: black;
+    font-size: 24px; /* Proportionally reduced */
+    font-family: Poppins;
+    font-weight: 600;
+    word-wrap: break-word;
+  }
+  
+  .Group1171278554 {
+    width: 1395px;  /* Proportionally reduced */
+    height: 98px;   /* Proportionally reduced */
+    position: relative;
+  }
+  
+  .Rectangle41054, .Rectangle41055, .Rectangle41056, .Rectangle41057, .Rectangle41058, .Rectangle41059 {
+    width: 213.75px; /* Proportionally reduced */
+    height: 98px;   /* Proportionally reduced */
+    position: absolute;
+    background: white;
+    border-radius: 10px;
+  }
+  
+  .Rectangle41055 {
+    left: 236.25px; /* Proportionally reduced */
+  }
+  
+  .Rectangle41056 {
+    left: 472.50px; /* Proportionally reduced */
+  }
+  
+  .Rectangle41057 {
+    left: 708.75px; /* Proportionally reduced */
+  }
+  
+  .Rectangle41058 {
+    left: 945px;    /* Proportionally reduced */
+  }
+  
+  .Rectangle41059 {
+    left: 1181.25px; /* Proportionally reduced */
+  }
+  
+  .Group1171278421, .Group1171278549, .Group1171278550, .Group1171278551, .Group1171278552, .Group1171278553 {
+    width: 127.50px; /* Proportionally reduced */
+    height: 54px;   /* Proportionally reduced */
+    position: absolute;
+  }
+  
+  .LearnersRegistered, .LearnersEnrolled, .CertificateIssued, .LearnersActive, .LearnersInactive, .AvgTime {
+    left: 0px;
+    top: 0px;
+    position: absolute;
+    opacity: 0.60;
+    color: black;
+    font-size: 12.75px; /* Proportionally reduced */
+    font-family: Poppins;
+    font-weight: 500;
+    word-wrap: break-word;
+  }
+  
+  .LearnerCount {
+    left: 0px;
+    top: 27px;    /* Proportionally reduced */
+    position: absolute;
+    color: black;
+    font-size: 23px; /* Proportionally reduced */
+    font-family: Poppins;
+    font-weight: 600;
+    line-height: 27px; /* Proportionally reduced */
+    word-wrap: break-word;
+  }
+  
+  .Ellipse {
+    width: 52.50px; /* Proportionally reduced */
+    height: 52.50px; /* Proportionally reduced */
+    position: absolute;
+    opacity: 0.10;
+    border-radius: 9999px;
+  }
+  
+  .e-1 {
+    left: 15px;    /* Proportionally reduced */
+    top: 22.50px;  /* Proportionally reduced */
+    background: #6169F3;
+  }
+  
+  .e-2 {
+    left: 252.75px; /* Proportionally reduced */
+    top: 22.50px;  /* Proportionally reduced */
+    background: #E6AC3C;
+  }
+  
+  .e-3 {
+    left: 490.50px; /* Proportionally reduced */
+    top: 22.50px;  /* Proportionally reduced */
+    background: #D4EF8D;
+  }
+  
+  .e-4 {
+    left: 728.25px; /* Proportionally reduced */
+    top: 22.50px;  /* Proportionally reduced */
+    background: #ED6073;
+  }
+  
+  .e-5 {
+    left: 966px;   /* Proportionally reduced */
+    top: 22.50px;  /* Proportionally reduced */
+    background: #C198ED;
+  }
+  
+  .e-6 {
+    left: 1203.75px; /* Proportionally reduced */
+    top: 22.50px;  /* Proportionally reduced */
+    background: #94D3F0;
+  }
+  
+  .MaskGroup {
+    width: 97.50px; /* Proportionally reduced */
+    height: 97.50px; /* Proportionally reduced */
+    position: absolute;
+  }
+  
+  .Verify1, .Contract1, .Clock11, .Checklist1, .Warning1 {
+    width: 97.50px; /* Proportionally reduced */
+    height: 97.50px; /* Proportionally reduced */
+    position: absolute;
+    left: 0px;
+    top: 0px;
+  }
+  
+  .Rectangle41065, .Rectangle41066, .Rectangle41068, .Rectangle41069, .Rectangle41070 {
+    width: 97.50px; /* Proportionally reduced */
+    height: 97.50px; /* Proportionally reduced */
+    position: absolute;
+    border-radius: 10px;
+  }
+  
+  .Icons {
+    width: 75px;   /* Proportionally reduced */
+    height: 75px;  /* Proportionally reduced */
+    position: absolute;
+  }
+  
+  .Vector {
+    width: 22.50px; /* Proportionally reduced */
+    height: 22.50px; /* Proportionally reduced */
+    position: absolute;
+  }
+  
