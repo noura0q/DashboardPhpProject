@@ -1,8 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard 3</title>
-    <link rel="stylesheet" type="text/css" href="dashboard3.css">
+    <link rel="stylesheet" type="text/css" href="Hr.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
 
@@ -160,7 +159,7 @@
 
 
     </div>
-    <script src="chart.js"></script>
+    <script src="HrChart.js"></script>
 
 
 
