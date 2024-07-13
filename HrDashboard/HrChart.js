@@ -204,6 +204,13 @@ var EducationChart = echarts.init(document.getElementById('Education'));
 
 // Specify the configuration items and data for the chart
 var EducationOption = {
+    title: {
+        text: 'Education Details',
+        textStyle: {
+            fontSize: 16,
+            fontWeight: 'bold'
+        }
+    },
     legend: {
         top: 'bottom'
     },
@@ -251,6 +258,13 @@ var genderChart = echarts.init(document.getElementById('gender'));
 genderOption = {
     tooltip: {
       trigger: 'item'
+    },
+    title: {
+        text: 'Male & Female',
+        textStyle: {
+            fontSize: 16,
+            fontWeight: 'bold'
+        }
     },
     legend: {
       top: '5%',
@@ -305,6 +319,13 @@ regionOption = {
     legend: {
       top: '5%',
       left: 'center'
+    },
+    title: {
+        text: 'Ksa Region Wise Learners’ Distribution',
+        textStyle: {
+            fontSize: 16,
+            fontWeight: 'bold'
+        }
     },
     series: [
       {

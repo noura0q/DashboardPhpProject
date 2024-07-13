@@ -103,3 +103,57 @@ body {
     border-radius: 10px;
     background-color: #FFFFFF;
 }
+
+.table-container {
+    width: 400px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+
+}
+
+caption {
+    font-weight: bold;
+    text-align: left; /* Align caption text to the left */
+    padding: 10px; /* Optional: Add padding to the caption */
+    background-color: white; /* Optional: Set a background color */
+}
+th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #E5E5E5;
+}
+
+th {
+    background-color: lightblue; 
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+.scroll-pane {
+    width: 400px;
+    height: 200px;
+    overflow-y: scroll;
+    margin: 20px auto;
+}
+
+/* Added custom scrollbar styles */
+.scroll-pane::-webkit-scrollbar {
+    width: 8px;
+}
+
+.scroll-pane::-webkit-scrollbar-thumb {
+    background-color: #6169F3;
+    border-radius: 4px;
+    margin: 10px;
+}
+
+.scroll-pane::-webkit-scrollbar-track {
+    background-color: #6168f329;
+    border-radius: 4px;
+}
