@@ -5,7 +5,7 @@
 <div class="AimsRegistrationDashboard">
   <div class="Bg bg-1"></div>
   <div class="Bg bg-2"></div>
-  <div class="Domains">Domains</div>
+  <div class="Domains">Domainss</div>
   <div class="Group1171278483">
     <div class="Group1171278480">
       <div class="Group1171278331">
