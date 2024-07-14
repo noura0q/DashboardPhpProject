@@ -1,7 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="Hr.css">
+    <link rel="stylesheet" type="text/css" href="progressDashboard_3.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 
 </head>
@@ -212,8 +212,7 @@
     </div>
 
     </div>
-    <script src="HrChart.js"></script>
-
+    <script src="progressDashboard_3.js"></script>
 
 
 </body>
