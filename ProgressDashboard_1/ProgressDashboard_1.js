@@ -51,7 +51,7 @@ var KSaRegionWiseLearners_Options  =  {
             },
             {
                 value: 300,
-                name: 'Al Baha'
+                name: 'Al Baha '
             },
             {
                 value: 300,
