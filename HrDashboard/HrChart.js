@@ -116,7 +116,6 @@ var experienceOption = {
 experienceChart.setOption(experienceOption);
 
 // HR Enrolled V/s Completion chart
-
 // Initialize the echarts instance based on the prepared dom
 var HRChart = echarts.init(document.getElementById('HR Enrolled V/s Completion'));
 
@@ -365,4 +364,3 @@ regionOption = {
 
   // Display the chart using the configuration items and data just specified.
   regionChart.setOption(regionOption);
-
