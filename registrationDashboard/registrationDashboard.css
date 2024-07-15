@@ -1,0 +1,356 @@
+.AimsRegistrationDashboard {
+  width: 1440px; 
+  height: 2480px; 
+  position: relative;
+  background: #F7F8FD;
+}
+
+.Bg {
+  position: absolute;
+  background: white;
+}
+
+.bg-1 {
+  width: 1440px;  
+  height: 74px;   
+  left: 0px;
+  top: 0px;
+}
+
+.bg-2 {
+  width: 915px;   
+  height: 105px;  
+  left: 505px;    
+  top: 96px;      
+  border-radius: 10px;
+}
+
+.bg-3 {
+  width: 457px;   
+  height: 105px;  
+  left: 23px;     
+  top: 96px;      
+  border-radius: 10px;
+}
+
+.Domains {
+  left: 918px;    
+  top: 114px;     
+  position: absolute;
+  color: black;
+  font-size: 18px; 
+  font-family: Poppins;
+  font-weight: 600;
+  word-wrap: break-word;
+}
+
+.Group1171278483 {
+  height: 23px;  
+  left: 665px;   
+  top: 152px;    
+  position: absolute;
+}
+
+.Group1171278480, .Group1171278481, .Group1171278482, .Group1171278483, .Group1171278484 {
+  width: 65px;   
+  height: 23px;  
+  position: absolute;
+}
+
+.Group1171278481 {
+  left: 178px;   
+}
+.Group1171278484{
+  left: 543px;   
+
+}
+.Group1171278482 {
+  left: 343px;   
+}
+
+
+.Group1171278331 {
+  width: 23px;   
+  height: 23px;  
+  position: absolute;
+}
+
+.Ellipse1162 {
+  width: 23px;   
+  height: 23px;  
+  position: absolute;
+  border-radius: 9999px;
+  border: 1.75px #00BC8B solid;
+}
+
+.Ellipse1162.active {
+  background: #00BC8B;
+}
+
+.Vector4 {
+  width: 11px;   
+  height: 7.79px; 
+  position: absolute;
+  left: 5.63px;  
+  top: 7.36px;   
+  border: 2.20px #00BC8B solid;
+}
+
+.Vector4.checked {
+  border-color: white;
+}
+
+.Moe, .Hr, .Defense, .Others {
+  left: 34px;    
+  top: 0px;
+  position: absolute;
+  opacity: 0.80;
+  color: black;
+  font-size: 15px; 
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  word-wrap: break-word;
+}
+
+.Group1171278479 {
+  width: 182px;  
+  height: 65.63px; 
+  left: 175px;   
+  top: 114px;    
+  position: absolute;
+}
+
+.LearnersRegistered, .LearnersEnrolled, .CertificateIssued, .LearnersActive, .LearnersInactive, .AvgTime {
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  color: black;
+  font-size: 18px; 
+  font-family: Poppins;
+  font-weight: 600;
+  word-wrap: break-word;
+}
+
+.LearnerCount {
+  left: 35.63px;  
+  top: 31.88px;   
+  position: absolute;
+  color: black;
+  font-size: 23px; 
+  font-family: Poppins;
+  font-weight: 700;
+  word-wrap: break-word;
+}
+
+.MsaiRegistrationDashboard {
+  left: 539px;    
+  top: 19px;      
+  position: absolute;
+  color: black;
+  font-size: 24px; 
+  font-family: Poppins;
+  font-weight: 600;
+  word-wrap: break-word;
+}
+
+.Group1171278554 {
+  width: 1395px;  
+  height: 98px;   
+  position: relative;
+}
+
+.Rectangle41054, .Rectangle41055, .Rectangle41056, .Rectangle41057, .Rectangle41058, .Rectangle41059 {
+  width: 213.75px; 
+  height: 98px;   
+  position: absolute;
+  background: white;
+  border-radius: 10px;
+}
+
+.Rectangle41055 {
+  left: 236.25px; 
+}
+
+.Rectangle41056 {
+  left: 472.50px; 
+}
+
+.Rectangle41057 {
+  left: 708.75px; 
+}
+
+.Rectangle41058 {
+  left: 945px;    
+}
+
+.Rectangle41059 {
+  left: 1181.25px; 
+}
+
+.Group1171278421, .Group1171278549, .Group1171278550, .Group1171278551, .Group1171278552, .Group1171278553 {
+  width: 127.50px; 
+  height: 54px;   
+  position: absolute;
+}
+
+.LearnersRegistered, .LearnersEnrolled, .CertificateIssued, .LearnersActive, .LearnersInactive, .AvgTime {
+  left: 0px;
+  top: 0px;
+  position: absolute;
+  opacity: 0.60;
+  color: black;
+  font-size: 12.75px; 
+  font-family: Poppins;
+  font-weight: 500;
+  word-wrap: break-word;
+}
+
+.LearnerCount {
+  left: 0px;
+  top: 27px;    
+  position: absolute;
+  color: black;
+  font-size: 23px; 
+  font-family: Poppins;
+  font-weight: 600;
+  line-height: 27px; 
+  word-wrap: break-word;
+}
+
+.Ellipse {
+  width: 52.50px; 
+  height: 52.50px; 
+  position: absolute;
+  opacity: 0.10;
+  border-radius: 9999px;
+}
+
+.e-1 {
+  left: 15px;    
+  top: 22.50px;  
+  background: #6169F3;
+}
+
+.e-2 {
+  left: 252.75px; 
+  top: 22.50px;  
+  background: #E6AC3C;
+}
+
+.e-3 {
+  left: 490.50px; 
+  top: 22.50px;  
+  background: #D4EF8D;
+}
+
+.e-4 {
+  left: 728.25px; 
+  top: 22.50px;  
+  background: #ED6073;
+}
+
+.e-5 {
+  left: 966px;   
+  top: 22.50px;  
+  background: #C198ED;
+}
+
+.e-6 {
+  left: 1203.75px; 
+  top: 22.50px;  
+  background: #94D3F0;
+}
+
+.MaskGroup {
+  width: 97.50px; 
+  height: 97.50px; 
+  position: absolute;
+}
+
+.Verify1, .Contract1, .Clock11, .Checklist1, .Warning1 {
+  width: 97.50px; 
+  height: 97.50px; 
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.Rectangle41065, .Rectangle41066, .Rectangle41068, .Rectangle41069, .Rectangle41070 {
+  width: 97.50px; 
+  height: 97.50px; 
+  position: absolute;
+  border-radius: 10px;
+}
+
+.Icons {
+  width: 75px;   
+  height: 75px;  
+  position: absolute;
+}
+
+.Vector {
+  width: 22.50px; 
+  height: 22.50px; 
+  position: absolute;
+}
+
+/* Chart Container Styles */
+.chart-container {
+  width: 620px;
+  height: 420px;
+  margin: 20px auto;
+  text-align:justify;
+  background: white;
+}
+
+.charts-section {
+  display: flex;
+  justify-content: flex-start; /* Ensure charts align from the left */
+  align-items: flex-start; /* Align items at the top */
+  flex-wrap: wrap;
+  padding: 20px;
+  position: absolute;
+  top: 200px; /* Adjust this value to position below Learners Registered */
+  left: 0; /* Adjust as per your layout */
+  width: 100%; /* Take full width */
+}
+
+.chartNAME {
+  font-size: 24px; 
+  font-family: Poppins;
+  font-weight: 600;
+  position: relative;
+}
+
+.chart-container table {
+  width: 50%;
+  border-collapse: collapse;
+  margin: 20px auto;
+  font-size: 24px; 
+  font-family: Poppins;
+  font-weight: 600;
+}
+.chart-container h2 {
+  font-size: 24px; 
+  font-family: Poppins;
+  font-weight: 600;
+}
+.chart-container th, .chart-container td {
+  border: 1px black;
+  padding: 8px;
+  text-align: left;
+  padding-right: 400px; /* Adjust the value as needed */
+  font-size: 15px; 
+  font-family: Poppins;
+  font-weight: 600;
+  white-space: nowrap; /* Prevent text wrapping */
+
+}
+
+.chart-container th {
+  background-color: #f2f2f2;
+  font-size: 15px; 
+  font-family: Poppins;
+  font-weight: 600;
+}

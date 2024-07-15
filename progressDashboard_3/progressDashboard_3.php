@@ -127,7 +127,7 @@
         </div>
 
         <div class="dashboard-container">
-            <div class="dashboard-item  " id="learner experience" style="width: 400px;height:400px; ">
+            <div class="dashboard-item  " id="learner experience" style="width: 700px;height:400px; ">
             </div>
             <div class="dashboard-item  " id="HR Enrolled V/s Completion" style="width: 700px;height:400px; ">
             </div>
@@ -145,7 +145,7 @@
 
         </div>
         <div class="dashboard-container">
-            <div class="scroll-pane dashboard-item" id="Education" style="width: 550px;height:250px; ">
+            <div class="scroll-pane dashboard-item" id="Education" style="width: 650px;height:250px; ">
                 <table>
                     <caption>City Wise Distribution</caption>
                     <tr>
@@ -176,7 +176,7 @@
                 </table>
             </div>
 
-            <div class="scroll-pane dashboard-item" id="Education" style="width: 550px;height:250px; ">
+            <div class="scroll-pane dashboard-item" id="Education" style="width: 650px;height:250px; ">
                 <table>
                     <caption>Company Wise Distribution</caption>
                     <tr>
@@ -213,6 +213,7 @@
 
     </div>
     <script src="progressDashboard_3.js"></script>
+
 
 
 </body>
