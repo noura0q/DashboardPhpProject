@@ -7,9 +7,7 @@
 </head>
 
 <body>
-<h1 class="dashboard-title">MSAI: Progress Dashboard</h1>
     <div class="AimsRegistrationDashboard">
-        <!-- Existing content -->
     </div>
 
     <div class="Group1171278554">
