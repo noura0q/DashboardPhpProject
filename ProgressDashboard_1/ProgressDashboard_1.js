@@ -1,356 +1,446 @@
-var colorPalette = ['#6169F2', '#2e9dec', '#ec3a48', '#3ba372', '#54a0da', '#e14e59', '#fbc958', '#e33992', '#fc8d36', '#0abca4'];
+var learnersCompletionStatusbyDomainChart = echarts.init(document.getElementById('Learners Completion Status by Domain'))
 
-
-var KSaRegionWiseLearners = echarts.init(document.getElementById('Ksa Region Wise Learners Distribution'));
-
-// Pie Chart Options
-var KSaRegionWiseLearners_Options  =  {
+var learnersCompletionStatusbyDomainChart_Options  = {
     title: {
-        text: 'KSA Region Wise Learners Distribution',
-        left: 'left'
+      text: 'Learners Completions Status by Domain' 
     },
     tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)'
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
     },
-    legend: {
-        type: 'scroll',
-        orient: 'horizontal',
-        bottom: '0',
-        data: ['Riyadh', 'Western Region', 'Northen Borders', 'Asir', 'Madina', 'Jazan', 'Al Baha', 'Najran', 'Hail', 'Eastern Region']
-    },
-    series: [{
-        name: 'Learner Distribution',
-        type: 'pie',
-        radius: ['40%', '70%'],
-        center: ['50%', '50%'],
-        color: colorPalette,
-        data: [{
-                value: 1048,
-                name: 'Riyadh'
-            },
-            {
-                value: 735,
-                name: 'Western Region'
-            },
-            {
-                value: 580,
-                name: 'Northen Borders'
-            },
-            {
-                value: 484,
-                name: 'Asir'
-            },
-            {
-                value: 300,
-                name: 'Madina'
-            },
-            {
-                value: 300,
-                name: 'Jazan'
-            },
-            {
-                value: 300,
-                name: 'Al Baha '
-            },
-            {
-                value: 300,
-                name: 'Najran'
-            },
-            {
-                value: 300,
-                name: 'Hail'
-            },
-            {
-                value: 300,
-                name: 'Eastern Region'
-            }
-        ],
-        emphasis: {
-            itemStyle: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-            }
-        }
-    }]
-};
-  
-KSaRegionWiseLearners.setOption(KSaRegionWiseLearners_Options);
-
-
-
-
-var ProfessionAndProficiencyLevelRelation = echarts.init(document.getElementById('Profession And Proficiency Level Relation'));
-
-var ProfessionAndProficiencyLevelRelation_Options = {
-    title: {
-        text: 'Profession And Proficiency Level Relation'
-    },
-    tooltip: {
-        trigger: 'axis',
-        axisPointer: {
-            type: 'shadow'
-        }
-    },
-    legend: {
-        data: ['MoE', 'HR', 'Defense'],
-        right: '4%',
-        bottom: '95%'
-    },
+    legend: {},
     grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '20%',
-        containLabel: true
-    },
-    xAxis: {
-        type: 'value',
-        name: 'Number of Learners',
-        nameLocation: 'middle',
-        nameTextStyle: {
-            align: 'center',
-            verticalAlign: 'top'
-        }
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
     },
     yAxis: {
-        type: 'category',
-        name: 'Profession',
-        data: ['Private', 'Public', 'Job Seekers', 'Student']
+      type: 'category',
+      data: ['MoE', 'HR', 'Defense', 'Others'],
+      inverse: true,  // Set inverse to true to display from right to left
+      axisLabel: {
+        fontWeight: 'bold', // Make the labels on the y-axis bold
+        fontSize: 16
+      },
+      axisLine: {
+        show: false // Hide the y-axis line
+      }
     },
-    series: [{
-            name: 'MoE',
-            type: 'bar',
-            stack: 'total',
-            label: {
-                show: true
-            },
-            emphasis: {
-                focus: 'series'
-            },
-            itemStyle: {
-                color: '#6169f2'
-            },
-            data: [6490, 3020, 5000, 9000]
+    xAxis: {
+      type: 'value',
+      boundaryGap: [0],
+    },
+    series: [
+      {
+        type: 'bar',
+        data: [9000, 5000, 3020, 2490],
+        itemStyle: {
+          color: '#6069f3', // Set the bar color to a specific shade of purple
+          borderRadius: [0, 8, 8 , 0]
         },
-        {
-            name: 'HR',
-            type: 'bar',
-            stack: 'total',
-            label: {
-                show: true
-            },
-            emphasis: {
-                focus: 'series'
-            },
-            itemStyle: {
-                color: '#fc8d36'
-            },
-            data: [3468, 3468, 2399, 1578]
-        },
-        {
-            name: 'Defense',
-            type: 'bar',
-            stack: 'total',
-            label: {
-                show: true
-            },
-            emphasis: {
-                focus: 'series'
-            },
-            itemStyle: {
-                color: '#0abca4'
-            },
-            data: [7678, 3245, 1568, 3245]
+        barWidth: '40%', // Make the bar less wide
+        barCategoryGap: '20%', // Reduce the space between bars
+        label: {
+          show: true,
+          position: 'inside', // Display numbers inside the bars
+          formatter: '{c}', // Format to display the actual value of the bar
+          fontSize: 12,
+          color: 'white' // Ensure numbers are visible on the purple bar
         }
+      },
     ]
+  };
+  
+  learnersCompletionStatusbyDomainChart.setOption(learnersCompletionStatusbyDomainChart_Options);
+
+
+// Overall Learners Completion Status
+var overallLearnersCompletionChart = echarts.init(document.getElementById('OverallLearnersCompletionStatus'));
+
+var overallLearnersCompletionChart_Options = {
+  title: {
+      text: 'Overall Learners’ Completion Status',
+      top: '5%'
+  },
+  tooltip: {
+      trigger: 'item'
+  },
+  series: [
+      {
+          name: 'Completion Status',
+          type: 'pie',
+          radius: ['55%', '80%'],
+          center: ['50%', '60%'], // Adjust center to decrease space
+          startAngle: 180,
+          endAngle: 360,
+          data: [
+              { 
+                  value: 755500, 
+                  name: 'Completed', 
+                  itemStyle: { color: '#6069f3' },
+                  label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: '755,500', // Display the number on the purple segment
+                      fontSize: 12,
+                      color: 'white'
+                  }
+              },
+              { 
+                  value: 244500, 
+                  name: 'Uncompleted', 
+                  itemStyle: { color: '#fb8d35' },
+                  label: {
+                      show: true,
+                      position: 'inside',
+                      formatter: '244,500', // Display the number on the orange segment
+                      fontSize: 12,
+                      color: 'white'
+                  }
+              },
+              { 
+                  value: 0, // Add a zero-value segment to place the total label
+                  name: 'Total',
+                  itemStyle: { color: 'transparent' },
+                  label: {
+                      show: true,
+                      position: 'outside',
+                      formatter: '1,000,000', // Display the total number
+                      fontSize: 12,
+                      color: '#000',
+                      padding: [0, 0, 0, -25] // Adjust the padding to position the label
+                  }
+              }
+          ],
+          labelLine: {
+              show: false
+          }
+      },
+      {
+          name: 'Completion Percentage',
+          type: 'gauge',
+          center: ['50%', '50%'], 
+          radius: '60%',
+          startAngle: 180,
+          endAngle: 0,
+          splitLine: { // Remove the split lines
+              show: false
+          },
+          axisTick: { // Hide the axis ticks
+              show: false
+          },
+          axisLabel: { // Hide the axis labels
+              show: false
+          },
+          pointer: {
+              show: false // Hide the pointer
+          },
+          detail: {
+              formatter: '{value}%', // Display percentage in the middle
+              fontSize: 24,
+              fontWeight: 'bold',
+              offsetCenter: [0, '30%'] // Position percentage in the middle
+          },
+          data: [
+              { 
+                  value: (755500 / (755500 + 244500) * 100).toFixed(2) // Calculate the percentage for 'Completed'
+              }
+          ]
+      }
+  ]
 };
 
-
-ProfessionAndProficiencyLevelRelation.setOption(ProfessionAndProficiencyLevelRelation_Options);
-
+overallLearnersCompletionChart.setOption(overallLearnersCompletionChart_Options);
 
 
+// HR Enrolled V/S Completion Status
+var HREnrolledVSCompletion = echarts.init(document.getElementById('HR Enrolled V/s Completion'));
 
-
- 
-var CourseComoletion = echarts.init(document.getElementById('Course Comoletion'));
-
- // Set up the chart options
- var CourseComoletion_Options = {
-    title: {
-        text: 'Course Completions',
-        left: 'left',
-        top: 20,
-        textStyle: {
-            fontSize: 18,
-            fontWeight: 'bold'
-        }
-    },
-    xAxis: {
-        type: 'category',
-        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [{
-        data: [39, 25, 37, 29, 39, 22, 41, 29, 41, 24, 38, 32],
-        type: 'bar',
-        barWidth: '30%', // Set the bar width to 40% of the available space
-        itemStyle: {
-            color: '#fd8c36' // Set the bar color to a custom color
-        }
-    }],
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
+ var HREnrolledVSCompletion_Options = {
+  title: {
+    text: 'HR Enrolled V/S Completed'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    right: '10%',
+    data: [
+      { name: 'Enrolled', icon: 'circle', textStyle: { color: 'black' } },
+      { name: 'Completed', icon: 'circle', textStyle: { color: 'black' } }
+    ]
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      dataView: { show: true, readOnly: false },
+      magicType: { show: false, type: ['line', 'bar'] },
+      restore: { show: false },
+      saveAsImage: { show: true }
     }
-};
-
-CourseComoletion.setOption(CourseComoletion_Options);
-
-
-
-
-
-var EnrolledInCourse = echarts.init(document.getElementById('Enrolled In Course'));
-
-// Set up the chart options
-var EnrolledInCourse_options = {
-    title: {
-        text: 'Enrolled in Course',
-        left: 'left',
-        top: 20,
-        textStyle: {
-            fontSize: 18,
-            fontWeight: 'bold'
-        }
-    },
-    xAxis: {
-        type: 'category',
-        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [{
-        data: [16, 18, 12, 18, 15, 21, 14, 19, 12, 17, 12,19],
-        type: 'bar',
-        barWidth: '30%', // Set the bar width to 40% of the available space
-        itemStyle: {
-            color: '#6169f2', // Set the bar color to a custom color
-            borderRadius: [10, 10, 0, 0] // Set the border radius of the bars (top-left, top-right, bottom-right, bottom-left)
-        }
-    }],
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
+  },
+  calculable: true,
+  xAxis: [
+    {
+      type: 'category',
+      data: [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ]
     }
-};
-
-EnrolledInCourse.setOption(EnrolledInCourse_options);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var MonthWiseActiveLearners = echarts.init(document.getElementById('Month Wise Active Learners'));
-
-// Set up the chart options
-var MonthWiseActiveLearners_options = {
-    title: {
-        text: 'Month Wise Active Learners',
-        left: 'left',
-        top: 20,
-        textStyle: {
-            fontSize: 18,
-            fontWeight: 'bold'
-        }
-    },
-    xAxis: {
-        type: 'category',
-        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [{
-        data: [13, 14, 10, 13, 12, 16, 12, 14, 11, 13, 10,14],
-        type: 'bar',
-        barWidth: '30%', // Set the bar width to 40% of the available space
-        itemStyle: {
-            color: '#6169f2', // Set the bar color to a custom color
-            borderRadius: [10, 10, 0, 0] // Set the border radius of the bars (top-left, top-right, bottom-right, bottom-left)
-        }
-    }],
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
+  ],
+  yAxis: [
+    {
+      type: 'value'
     }
-};
-
-MonthWiseActiveLearners.setOption(MonthWiseActiveLearners_options);
-
-
-
-
-var MonthWiseLearnerRegistration = echarts.init(document.getElementById('Month Wise Learner Registration'));
-
- // Set up the chart options
- var MonthWiseLearnerRegistration_Options = {
-    title: {
-        text: 'Month Wise Learner Registration',
-        left: 'left',
-        top: 20,
-        textStyle: {
-            fontSize: 18,
-            fontWeight: 'bold'
-        }
+  ],
+  series: [
+    {
+      name: 'Enrolled',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: [
+        23456, 17890, 20345, 15678, 12345, 2345, 5678, 11011, 14123, 22134, 19876, 25000
+      ],
+      itemStyle: {
+        color: '#6069f3',
+        borderRadius: [8, 8, 0 , 0]
+      }
     },
-    xAxis: {
-        type: 'category',
-        data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun','Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-    },
-    yAxis: {
-        type: 'value'
-    },
-    series: [{
-        data: [14,8, 13, 9, 15, 7, 16, 9, 17, 24,8, 14, 10],
-        type: 'bar',
-        barWidth: '30%', // Set the bar width to 40% of the available space
-        itemStyle: {
-            color: '#0abca4' // Set the bar color to a custom color
-        }
-    }],
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
+    {
+      name: 'Completed',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: [
+        19876, 15432, 12456, 17890, 2345, 6789, 12123, 8123, 12345, 19987, 25000, 11000
+      ],
+      itemStyle: {
+        color: '#fb8d35',
+        borderRadius: [8, 8, 0 , 0]
+      }
     }
+  ]
 };
 
-MonthWiseLearnerRegistration.setOption(MonthWiseLearnerRegistration_Options);
+HREnrolledVSCompletion.setOption(HREnrolledVSCompletion_Options);
+
+
+
+// MoE Enrolled V/S Completion Status
+var MoEEnrolledVSCompletion = echarts.init(document.getElementById('MoE Enrolled V/s Completion'));
+
+ var MoEEnrolledVSCompletion_Options = {
+  title: {
+    text: 'MoE Enrolled V/S Completed'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    right: '10%',
+    data: [
+      { name: 'Enrolled', icon: 'circle', textStyle: { color: 'black' } },
+      { name: 'Completed', icon: 'circle', textStyle: { color: 'black' } }
+    ]
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      dataView: { show: true, readOnly: false },
+      magicType: { show: false, type: ['line', 'bar'] },
+      restore: { show: false },
+      saveAsImage: { show: true }
+    }
+  },
+  calculable: true,
+  xAxis: [
+    {
+      type: 'category',
+      data: [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ]
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value'
+    }
+  ],
+  series: [
+    {
+      name: 'Enrolled',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: [
+        23456, 17890, 20345, 15678, 12345, 2345, 5678, 18011, 14123, 25000, 19876, 22134
+      ],
+      itemStyle: {
+        color: '#6069f3',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    },
+    {
+      name: 'Completed',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: [
+        9876, 15432, 20456, 17890, 19087, 22134, 12123, 18123, 12345, 19987, 17654, 6098
+      ],
+      itemStyle: {
+        color: '#fb8d35',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    }
+  ]
+};
+
+MoEEnrolledVSCompletion.setOption(MoEEnrolledVSCompletion_Options);
+
+
+//  Enrolled V/S Completion Status
+var defenseEnrolledVSCompletion = echarts.init(document.getElementById('Defense Enrolled V/s Completion'));
+
+ var defenseEnrolledVSCompletion_Options = {
+  title: {
+    text: 'Defense Enrolled V/S Completed'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    right: '10%',
+    data: [
+      { name: 'Enrolled', icon: 'circle', textStyle: { color: 'black' } },
+      { name: 'Completed', icon: 'circle', textStyle: { color: 'black' } }
+    ]
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      dataView: { show: true, readOnly: false },
+      magicType: { show: false, type: ['line', 'bar'] },
+      restore: { show: false },
+      saveAsImage: { show: true }
+    }
+  },
+  calculable: true,
+  xAxis: [
+    {
+      type: 'category',
+      data: [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ]
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value'
+    }
+  ],
+  series: [
+    {
+      name: 'Enrolled',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: [
+        23456, 17890, 20345, 15678, 12345, 2345, 5678, 20011, 14123, 22134, 19876, 25000
+      ],
+      itemStyle: {
+        color: '#6069f3',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    },
+    {
+      name: 'Completed',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: [
+        19876, 1890, 20456, 17890, 12456, 6789, 12123, 18123, 20983, 19987, 17654, 21000
+      ],
+      itemStyle: {
+        color: '#fb8d35',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    }
+  ]
+};
+
+defenseEnrolledVSCompletion.setOption(defenseEnrolledVSCompletion_Options);
+
+
+
+//  Others V/S Completion Status
+var othersEnrolledVSCompletion = echarts.init(document.getElementById('Others Enrolled V/s Completion'));
+
+ var othersEnrolledVSCompletion_Options = {
+  title: {
+    text: 'Others Enrolled V/S Completed'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    right: '10%',
+    data: [
+      { name: 'Enrolled', icon: 'circle', textStyle: { color: 'black' } },
+      { name: 'Completed', icon: 'circle', textStyle: { color: 'black' } }
+    ]
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      dataView: { show: true, readOnly: false },
+      magicType: { show: false, type: ['line', 'bar'] },
+      restore: { show: false },
+      saveAsImage: { show: true }
+    }
+  },
+  calculable: true,
+  xAxis: [
+    {
+      type: 'category',
+      data: [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ]
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value'
+    }
+  ],
+  series: [
+    {
+      name: 'Enrolled',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: [
+        23456, 17890, 20345, 15678, 12345, 2345, 5678, 9011, 25000, 2908, 19876, 25000
+      ],
+      itemStyle: {
+        color: '#6069f3',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    },
+    {
+      name: 'Completed',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: [
+        19876, 2090, 3986, 17890, 2345, 16789, 1123, 12123, 12345, 2000, 17654, 21000
+      ],
+      itemStyle: {
+        color: '#fb8d35',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    }
+  ]
+};
+
+othersEnrolledVSCompletion.setOption(othersEnrolledVSCompletion_Options);
+
+
+
+

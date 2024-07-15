@@ -1,7 +1,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="progressDashboard_1.css">
+    <link rel="stylesheet" type="text/css" href="progressDashboard_main.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
 
@@ -134,39 +134,184 @@
             </div>
         </div>
         <div class="dashboard-container">
-            <div class="dashboard-item  " id="OverallLearnersCompletionStatus" style="width: 800px;height:400px; ">
-            </div>
-            
-            <div class="dashboard-item  " id="Learners Completion Status by Domain" style="width: 800px;height:400px; ">
-            </div>
+            <div class='dashboard-item' id='Ksa Region Wise Learners Distribution' style="width: 500px;height:350px;"></div>
+            <div class='dashboard-item' id='Profession And Proficiency Level Relation' style="width: 900px;height:350px;"></div>
 
         </div>
         <div>
             <div class="dashboard-container">
-               
-            <div class="dashboard-item  " id="HR Enrolled V/s Completion" style="width: 700px;height:350px;"> </div>
-            <div class="dashboard-item  " id="MoE Enrolled V/s Completion" style="width: 700px;height:350px; ">
+                <div class='dashboard-item' id='Course Comoletion' style="width: 700px;height:350px;"> </div>
+                <div class='dashboard-item' id='Enrolled In Course' style="width: 700px;height:350px;"> </div>
             </div>
 
 
         </div>
 
         <div class="dashboard-container">
-
-        <div class="dashboard-item  " id="Others Enrolled V/s Completion" style="width: 700px;height:350px; ">
+            <div class='dashboard-item' id='Education Details' style="width: 700px;height:400px;"> </div>
+            <div class="dashboard-item  " id="gender" style="width: 700px;height:400px; ">
+            </div>
+          
+            <div class="dashboard-item  " id="top3Domains" style="width: 700px;height:400px; ">
             </div>
 
-            <div class="dashboard-item  " id="Defense Enrolled V/s Completion" style="width: 700px;height:350px; ">
+        </div>
 
-            </div>
-
-
-
+        <div class="dashboard-container">
+            <div class="dashboard-item  " style="width: 700px;height:500px; ">
+                <div class="google-map">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2990.274257380938!2d-70.56068388481569!3d41.45496659976631!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89e52963ac45bbcb%3A0xf05e8d125e82af10!2sDos%20Mas!5e0!3m2!1sen!2sus!4v1671220374408!5m2!1sen!2sus" width="600" height="450" style="border: 0px;;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
+            </div>
+            <div class="dashboard-item  " id="Learners experience Level" style="width: 700px;height:500px; ">
+            </div>
+        </div>
+
+        <div class="dashboard-container">
+            <div class='dashboard-item' id='Month Wise Active Learners' style="width: 700px;height:350px;"> </div>
+            <div class='dashboard-item' id='Month Wise Learner Registration' style="width: 700px;height:350px;"> </div>
+
+        </div>
+
+        <div class="dashboard-container">
+            <div class='dashboard-item' id='City Wise Distribution' style="width: 400px;height:350px;">
+                <div class="scroll-pane dashboard-item" style="width: 550px;height:300px; ">
+                    <table>
+                        <caption>City Wise Distribution</caption>
+                        <tr>
+                            <th>City</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>Riyadh</td>
+                            <td>53,000</td>
+                        </tr>
+                        <tr>
+                            <td>Jeddah</td>
+                            <td>51,000</td>
+                        </tr>
+                        <tr>
+                            <td>Dammam</td>
+                            <td>20,000</td>
+                        </tr>
+                        <tr>
+                            <td>Makkah</td>
+                            <td>10,000</td>
+                        </tr>
+                        <tr>
+                            <td>Madina</td>
+                            <td>15,000</td>
+                        </tr>
+                        <tr>
+                            <td>tabuk</td>
+                            <td>8,000</td>
+                        </tr>
+                        <tr>
+                            <td>Taif</td>
+                            <td>5,000</td>
+                        </tr>
+                        <!-- Add more rows here as needed -->
+                    </table>
+                </div>
+            </div>
+
+            <div class='dashboard-item' id='University Wise Distribution' style="width: 400px;height:350px;">
+                <div class="scroll-pane dashboard-item" style="width: 550px;height:300px; ">
+                    <table>
+                        <caption>University Wise Distribution</caption>
+                        <tr>
+                            <th>University</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>King Saud</td>
+                            <td>53000</td>
+                        </tr>
+                        <tr>
+                            <td>Umm Al-Qura</td>
+                            <td>51,000</td>
+                        </tr>
+                        <tr>
+                            <td>King Abdul Aziz</td>
+                            <td>20,000</td>
+                        </tr>
+                        <tr>
+                            <td>Imam Saud</td>
+                            <td>12000</td>
+                        </tr>
+                        <tr>
+                            <td>Prince Muqrin</td>
+                            <td>10000</td>
+                        </tr>
+                        <tr>
+                            <td>Prince Sattam bin Abdulaziz</td>
+                            <td>8,000</td>
+                        </tr>
+                        <tr>
+                            <td>King Fahd University of Petroleum and Minerals</td>
+                            <td>5,000</td>
+                        </tr>
+                        <!-- Add more rows here as needed -->
+                    </table>
+                </div>
+            </div>
+            <div class='dashboard-item' id='Company Wise Distribution' style="width: 400px;height:350px;">
+                <div class="scroll-pane dashboard-item" style="width: 550px;height:300px; ">
+                    <table>
+                        <caption>Company Wise Distribution</caption>
+                        <tr>
+                            <th>Company</th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <td>IBM</td>
+                            <td>53,000</td>
+                        </tr>
+                        <tr>
+                            <td>Accenture</td>
+                            <td>51,000</td>
+                        </tr>
+                        <tr>
+                            <td>Microsoft</td>
+                            <td>20,000</td>
+                        </tr>
+                        <tr>
+                            <td>Cisco</td>
+                            <td>10,000</td>
+                        </tr>
+                        <tr>
+                            <td>Wipro</td>
+                            <td>1o,000</td>
+                        </tr>
+                        <tr>
+                            <td>Coursera</td>
+                            <td>8,000</td>
+                        </tr>
+                        <tr>
+                            <td>Nvidia</td>
+                            <td>5,000</td>
+                        </tr>
+                        <!-- Add more rows here as needed -->
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+
+
 
     </div>
 
     </div>
-    <script src="progressDashboard_1.js"></script>
+
+    </div>
+    </div>
+
+    </div>
+    <script src="progressDashboard_main.js"></script>
 
 </body>
