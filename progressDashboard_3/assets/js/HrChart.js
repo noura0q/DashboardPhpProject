@@ -1,8 +1,10 @@
+// Initialize your charts here (echarts initialization)
 
 /// Initialize the echarts instance based on the prepared dom
 var experienceChart = echarts.init(document.getElementById('learner experience'));
 
-// Specify the configuration items and data for the chart
+// Specify the
+//configuration items and data for the chart
 var experienceOption = {
     title: {
         text: 'Learners Experience Levels',
@@ -364,3 +366,52 @@ regionOption = {
 
   // Display the chart using the configuration items and data just specified.
   regionChart.setOption(regionOption);
+// Function to fetch data from PHP API
+function fetchData() {
+    fetch('../fetch_data.php')
+        .then(response => response.json())
+        .then(data => {
+            // Update Learners Experience Levels chart
+            experienceOption.xAxis[0].data = data.experience.map(item => item.experience_category);
+            experienceOption.series[0].data = data.experience.map(item => item.learner_count);
+            experienceChart.setOption(experienceOption);
+
+            // Update HR Enrolled vs Completion chart
+            HROption.xAxis[0].data = data.hr.map(item => item.month);
+            HROption.series[0].data = data.hr.map(item => item.enrolled);
+            HRChart.setOption(HROption);
+
+            // Update Education Details chart
+            EducationOption.series[0].data = data.education.map(item => ({
+                value: item.number_of_learners,
+                name: item.education_level
+            }));
+            EducationChart.setOption(EducationOption);
+
+            // Update Gender Distribution chart
+            genderOption.series[0].data = data.gender.map(item => ({
+                value: item.percentage,
+                name: item.gender
+            }));
+            genderChart.setOption(genderOption);
+
+            // Update KSA Region Wise Learners' Distribution chart
+            regionOption.series[0].data = data.region.map(item => ({
+                value: item.number_of_learners,
+                name: item.region_name
+            }));
+            regionChart.setOption(regionOption);
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+}
+
+// Call fetchData function to initially populate charts
+fetchData();
+
+// Optionally, set interval to refresh data every x milliseconds if needed
+// setInterval(fetchData, 60000); // Example: Refresh data every minute
+
+
+

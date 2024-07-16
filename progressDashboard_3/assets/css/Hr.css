@@ -32,25 +32,10 @@ body {
     margin-right: 10px;
 }
 
-.Verify1 {
-    background-image: url('path-to-verify1-icon.png');
+.kpi-icon{
+    width: 35px;
 }
 
-.Contract1 {
-    background-image: url('path-to-contract1-icon.png');
-}
-
-.Clock11 {
-    background-image: url('path-to-clock11-icon.png');
-}
-
-.Checklist1 {
-    background-image: url('path-to-checklist1-icon.png');
-}
-
-.Warning1 {
-    background-image: url('path-to-warning1-icon.png');
-}
 
 .text-container {
     display: flex;
