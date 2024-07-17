@@ -1,8 +1,169 @@
+<?php
+include '../dbConnection.php';
+
+//QUERY Fetch overall learners completion status (half pie chart)
+$sql = "SELECT 
+SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) AS total_completed,
+SUM(CASE WHEN status = 'incompleted' THEN 1 ELSE 0 END) AS total_incompleted
+FROM user_courses;";
+
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    $row = $result->fetch_assoc();
+    $total_completed = $row["total_completed"];
+    $total_incompleted = $row["total_incompleted"];
+} else {
+    $total_completed = 0;
+    $total_incompleted = 0;
+}
+
+
+
+//QUERY Fetch learners completion status by domain (bar chart)
+$sql2 = "SELECT user_domain, COUNT(*) AS completed_count FROM learners WHERE user_id IN ( SELECT user_id FROM user_courses WHERE status = 'completed' ) GROUP BY user_domain;";
+
+$result2 = $conn->query($sql2);
+
+// Fetch data from SQL result
+$data = array();
+while ($row = $result2->fetch_assoc()) {
+    $domain = $row['user_domain'];
+    $completed_count = $row['completed_count'];
+    $data[$domain] = $completed_count;
+}
+
+// Convert fetched data to JavaScript object
+$learnersCompletionData = json_encode(array_values($data));
+
+//QUERY Fetch learners completion status by domain (bar chart)
+$sql3 = "SELECT YEAR(uc.EnrolmentDate) AS year, 
+                MONTH(uc.EnrolmentDate) AS month, 
+                SUM(CASE WHEN uc.status = 'completed' THEN 1 ELSE 0 END) AS completed_count, 
+                SUM(CASE WHEN uc.status != 'completed' THEN 1 ELSE 0 END) AS incompleted_count 
+         FROM learners l 
+         JOIN user_courses uc ON l.user_id = uc.user_id 
+         WHERE l.user_domain = 'HR' 
+         GROUP BY YEAR(uc.EnrolmentDate), MONTH(uc.EnrolmentDate) 
+         ORDER BY year, month 
+         LIMIT 0, 25;";
+
+$result3 = $conn->query($sql3);
+
+$completed_counts = array_fill(0, 12, 0);
+$incompleted_counts = array_fill(0, 12, 0);
+
+while ($row = $result3->fetch_assoc()) {
+    $month = intval($row['month']) - 1; // Adjust month to 0-indexed for JavaScript
+    $completed_counts[$month] = intval($row['completed_count']);
+    $incompleted_counts[$month] = intval($row['incompleted_count']);
+}
+
+$HRCompleted = json_encode($completed_counts);
+$HREnrolled = json_encode($incompleted_counts);
+
+
+//QUERY Fetch learners completion status by domain (bar chart)
+$sql4 = "SELECT YEAR(uc.EnrolmentDate) AS year, 
+                MONTH(uc.EnrolmentDate) AS month, 
+                SUM(CASE WHEN uc.status = 'completed' THEN 1 ELSE 0 END) AS completed_count, 
+                SUM(CASE WHEN uc.status != 'completed' THEN 1 ELSE 0 END) AS incompleted_count 
+         FROM learners l 
+         JOIN user_courses uc ON l.user_id = uc.user_id 
+         WHERE l.user_domain = 'MoE' 
+         GROUP BY YEAR(uc.EnrolmentDate), MONTH(uc.EnrolmentDate) 
+         ORDER BY year, month 
+         LIMIT 0, 25;";
+
+$result4 = $conn->query($sql4);
+
+$MoEcompleted_counts = array_fill(0, 12, 0);
+$MoEincompleted_counts = array_fill(0, 12, 0);
+
+while ($row = $result4->fetch_assoc()) {
+    $month = intval($row['month']) - 1; // Adjust month to 0-indexed for JavaScript
+    $MoEcompleted_counts[$month] = intval($row['completed_count']);
+    $MoEincompleted_counts[$month] = intval($row['incompleted_count']);
+}
+
+$MoECompleted = json_encode($MoEcompleted_counts);
+$MoeEnrolled = json_encode($MoEincompleted_counts);
+
+
+//QUERY Fetch learners completion status by domain (bar chart)
+$sql5 = "SELECT YEAR(uc.EnrolmentDate) AS year, 
+                MONTH(uc.EnrolmentDate) AS month, 
+                SUM(CASE WHEN uc.status = 'completed' THEN 1 ELSE 0 END) AS completed_count, 
+                SUM(CASE WHEN uc.status != 'completed' THEN 1 ELSE 0 END) AS incompleted_count 
+         FROM learners l 
+         JOIN user_courses uc ON l.user_id = uc.user_id 
+         WHERE l.user_domain = 'Defense' 
+         GROUP BY YEAR(uc.EnrolmentDate), MONTH(uc.EnrolmentDate) 
+         ORDER BY year, month 
+         LIMIT 0, 25;";
+
+$result5 = $conn->query($sql5);
+
+$Defensecompleted_counts = array_fill(0, 12, 0);
+$Defenseincompleted_counts = array_fill(0, 12, 0);
+
+while ($row = $result5->fetch_assoc()) {
+    $month = intval($row['month']) - 1; // Adjust month to 0-indexed for JavaScript
+    $Defensecompleted_counts[$month] = intval($row['completed_count']);
+    $Defenseincompleted_counts[$month] = intval($row['incompleted_count']);
+}
+
+$DefenseCompleted = json_encode($Defensecompleted_counts);
+$DefenseEnrolled = json_encode($Defenseincompleted_counts);
+
+
+
+//QUERY Fetch learners completion status by domain (bar chart)
+$sql6 = "SELECT YEAR(uc.EnrolmentDate) AS year, 
+                MONTH(uc.EnrolmentDate) AS month, 
+                SUM(CASE WHEN uc.status = 'completed' THEN 1 ELSE 0 END) AS completed_count, 
+                SUM(CASE WHEN uc.status != 'completed' THEN 1 ELSE 0 END) AS incompleted_count 
+         FROM learners l 
+         JOIN user_courses uc ON l.user_id = uc.user_id 
+         WHERE l.user_domain = 'Others' 
+         GROUP BY YEAR(uc.EnrolmentDate), MONTH(uc.EnrolmentDate) 
+         ORDER BY year, month 
+         LIMIT 0, 25;";
+
+$result6 = $conn->query($sql6);
+
+$Otherscompleted_counts = array_fill(0, 12, 0);
+$Othersincompleted_counts = array_fill(0, 12, 0);
+
+while ($row = $result6->fetch_assoc()) {
+    $month = intval($row['month']) - 1; // Adjust month to 0-indexed for JavaScript
+    $Otherscompleted_counts[$month] = intval($row['completed_count']);
+    $Othersincompleted_counts[$month] = intval($row['incompleted_count']);
+}
+
+$OthersCompleted = json_encode($Otherscompleted_counts);
+$OthersEnrolled = json_encode($Othersincompleted_counts);
+
+
+
+
+
+
+
+
+
+
+
+?>
+
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="progressDashboard_1.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
+
 </head>
 
 <body>
@@ -134,8 +295,8 @@
             </div>
         </div>
         <div class="dashboard-container">
-            <div class="dashboard-item  " id="OverallLearnersCompletionStatus" style="width: 800px;height:400px; ">
-            </div>
+        <div class="dashboard-item" id="OverallLearnersCompletionStatus" style="width: 800px;height:400px;"></div>
+
             
             <div class="dashboard-item  " id="Learners Completion Status by Domain" style="width: 800px;height:400px; ">
             </div>
@@ -157,16 +318,505 @@
             </div>
 
             <div class="dashboard-item  " id="Defense Enrolled V/s Completion" style="width: 700px;height:350px; ">
-
             </div>
-
-
-
                 </div>
 
     </div>
-
     </div>
-    <script src="progressDashboard_1.js"></script>
+
+<script>
+    // PHP variables passed to JavaScript
+    var totalCompleted = <?php echo $total_completed; ?>;
+    var totalIncompleted = <?php echo $total_incompleted; ?>;
+    var totalCourses = totalCompleted + totalIncompleted; // Total number of courses
+
+    // Initialize ECharts instance
+    var overallCoursesCompletionChart = echarts.init(document.getElementById('OverallLearnersCompletionStatus'));
+
+    // Chart options
+    var overallCoursesCompletionChart_Options = {
+        title: {
+            text: 'Overall Learners\' Completion Status',
+            top: '5%'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        series: [
+            {
+                name: 'Completion Status',
+                type: 'pie',
+                radius: ['55%', '80%'],
+                center: ['50%', '60%'],
+                startAngle: 180,
+                endAngle: 360,
+                data: [
+                    { 
+                        value: 0, // Add a zero-value segment to place the total label
+                        name: 'Total',
+                        itemStyle: { color: 'transparent' },
+                        label: {
+                            show: true,
+                            position: 'outside',
+                            formatter: '0', 
+                            fontSize: 12,
+                            color: '#000',
+                            padding: [0, -20, 0, -25] 
+                        }
+                    },
+                    { 
+                        value: totalCompleted, 
+                        name: 'Completed', 
+                        itemStyle: { color: '#6069f3' },
+                        label: {
+                            show: true,
+                            position: 'inside',
+                            formatter: totalCompleted.toLocaleString(), 
+                            fontSize: 12,
+                            color: 'white'
+                        }
+                    },
+                    { 
+                        value: totalIncompleted, 
+                        name: 'Incompleted', 
+                        itemStyle: { color: '#fb8d35' },
+                        label: {
+                            show: true,
+                            position: 'inside',
+                            formatter: totalIncompleted.toLocaleString(), 
+                            fontSize: 12,
+                            color: 'white'
+                        }
+                    },
+                    { 
+                        value: 0, // Add a zero-value segment to place the total label
+                        name: 'Total',
+                        itemStyle: { color: 'transparent' },
+                        label: {
+                            show: true,
+                            position: 'outside',
+                            formatter: totalCourses.toLocaleString(), 
+                            fontSize: 12,
+                            color: '#000',
+                            padding: [0, 0, 0, -25] 
+                        }
+                    }
+                ],
+                labelLine: {
+                    show: false
+                },
+            },
+                {
+            name: 'Completion Percentage',
+            type: 'gauge',
+            center: ['50%', '50%'], 
+            radius: '60%',
+            startAngle: 180,
+            endAngle: 0,
+            splitLine: { // Remove the split lines
+                show: false
+            },
+            axisTick: { // Hide the axis ticks
+                show: false
+            },
+            axisLabel: { // Hide the axis labels
+                show: false
+            },
+            pointer: {
+                show: false // Hide the pointer
+            },
+            detail: {
+                formatter: '{value}%', // Display percentage in the middle
+                fontSize: 24,
+                fontWeight: 'bold',
+                offsetCenter: [0, '30%'] // Position percentage in the middle
+            },
+            data: [
+                { 
+                    value: (totalCompleted / (totalCompleted + totalIncompleted) * 100).toFixed(2) // Calculate the percentage for 'Completed'
+                }
+            ]
+            }
+        ]
+    };
+
+    // Set options to the chart instance
+    overallCoursesCompletionChart.setOption(overallCoursesCompletionChart_Options);
+
+
+var learnersCompletionStatusbyDomainChart = echarts.init(document.getElementById('Learners Completion Status by Domain'));
+
+  // Data fetched from PHP
+  var learnersCompletionData = <?php echo $learnersCompletionData; ?>;
+
+  var learnersCompletionStatusbyDomainChart_Options  = {
+    title: {
+      text: 'Learners Completions Status by Domain' 
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {
+        type: 'shadow'
+      }
+    },
+    legend: {},
+    grid: {
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
+    },
+    yAxis: {
+      type: 'category',
+      data: ['MoE', 'HR', 'Defense', 'Others'],
+      inverse: true,
+      axisLabel: {
+        fontWeight: 'bold',
+        fontSize: 16
+      },
+      axisLine: {
+        show: false
+      }
+    },
+    xAxis: {
+      type: 'value',
+      boundaryGap: [0],
+    },
+    series: [
+      {
+        type: 'bar',
+        data: learnersCompletionData, // Use fetched data here
+        itemStyle: {
+          color: '#6069f3',
+          borderRadius: [0, 8, 8 , 0]
+        },
+        barWidth: '40%',
+        barCategoryGap: '20%',
+        label: {
+          show: true,
+          position: 'inside',
+          formatter: '{c}',
+          fontSize: 12,
+          color: 'white'
+        }
+      },
+    ]
+  };
+
+  learnersCompletionStatusbyDomainChart.setOption(learnersCompletionStatusbyDomainChart_Options);
+
+
+
+
+
+
+
+// HR Enrolled V/S Completion Status
+  var HREnrolledVSCompletion = echarts.init(document.getElementById('HR Enrolled V/s Completion'));
+
+  // Data fetched from PHP
+  var HRCompleted = <?php echo $HRCompleted; ?>;
+  var HREnrolled = <?php echo $HREnrolled; ?>;
+
+  var HREnrolledVSCompletion_Options = {
+    title: {
+      text: 'HR Enrolled V/S Completed'
+    },
+    tooltip: {
+      trigger: 'axis'
+    },
+    legend: {
+      right: '10%',
+      data: [
+        { name: 'Enrolled', icon: 'circle', textStyle: { color: 'black' } },
+        { name: 'Completed', icon: 'circle', textStyle: { color: 'black' } }
+      ]
+    },
+    toolbox: {
+      show: true,
+      feature: {
+        dataView: { show: true, readOnly: false },
+        magicType: { show: false, type: ['line', 'bar'] },
+        restore: { show: false },
+        saveAsImage: { show: true }
+      }
+    },
+    calculable: true,
+    xAxis: [
+      {
+        type: 'category',
+        data: [
+          'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ]
+      }
+    ],
+    yAxis: [
+      {
+        type: 'value'
+      }
+    ],
+    series: [
+      {
+        name: 'Enrolled',
+        type: 'bar',
+        barWidth: 10, // Adjust the width as needed
+        data: HREnrolled,
+        itemStyle: {
+          color: '#6069f3',
+          borderRadius: [8, 8, 0 , 0]
+        }
+      },
+      {
+        name: 'Completed',
+        type: 'bar',
+        barWidth: 10, // Adjust the width as needed
+        data: HRCompleted,
+        itemStyle: {
+          color: '#fb8d35',
+          borderRadius: [8, 8, 0 , 0]
+        }
+      }
+    ]
+  };
+
+  HREnrolledVSCompletion.setOption(HREnrolledVSCompletion_Options);
+
+
+
+
+
+
+
+
+// MoE Enrolled V/S Completion Status
+var MoEEnrolledVSCompletion = echarts.init(document.getElementById('MoE Enrolled V/s Completion'));
+ 
+// Data fetched from PHP
+  var MoECompleted = <?php echo $MoECompleted; ?>;
+  var MoEEnrolled = <?php echo $MoeEnrolled; ?>;
+
+var MoEEnrolledVSCompletion_Options = {
+ title: {
+   text: 'MoE Enrolled V/S Completed'
+ },
+ tooltip: {
+   trigger: 'axis'
+ },
+ legend: {
+   right: '10%',
+   data: [
+     { name: 'Enrolled', icon: 'circle', textStyle: { color: 'black' } },
+     { name: 'Completed', icon: 'circle', textStyle: { color: 'black' } }
+   ]
+ },
+ toolbox: {
+   show: true,
+   feature: {
+     dataView: { show: true, readOnly: false },
+     magicType: { show: false, type: ['line', 'bar'] },
+     restore: { show: false },
+     saveAsImage: { show: true }
+   }
+ },
+ calculable: true,
+ xAxis: [
+   {
+     type: 'category',
+     data: [
+       'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+     ]
+   }
+ ],
+ yAxis: [
+   {
+     type: 'value'
+   }
+ ],
+ series: [
+   {
+     name: 'Enrolled',
+     type: 'bar',
+     barWidth: 10, // Adjust the width as needed
+     data: MoEEnrolled,
+     itemStyle: {
+       color: '#6069f3',
+       borderRadius: [8, 8, 0 , 0]
+     }
+   },
+   {
+     name: 'Completed',
+     type: 'bar',
+     barWidth: 10, // Adjust the width as needed
+     data: MoECompleted,
+     itemStyle: {
+       color: '#fb8d35',
+       borderRadius: [8, 8, 0 , 0]
+     }
+   }
+ ]
+};
+
+MoEEnrolledVSCompletion.setOption(MoEEnrolledVSCompletion_Options);
+
+
+//  Enrolled V/S Completion Status
+var defenseEnrolledVSCompletion = echarts.init(document.getElementById('Defense Enrolled V/s Completion'));
+
+  // Data fetched from PHP
+  var defenseCompleted = <?php echo $DefenseCompleted; ?>;
+  var defenseEnrolled = <?php echo $DefenseEnrolled; ?>;
+
+
+ var defenseEnrolledVSCompletion_Options = {
+  title: {
+    text: 'Defense Enrolled V/S Completed'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    right: '10%',
+    data: [
+      { name: 'Enrolled', icon: 'circle', textStyle: { color: 'black' } },
+      { name: 'Completed', icon: 'circle', textStyle: { color: 'black' } }
+    ]
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      dataView: { show: true, readOnly: false },
+      magicType: { show: false, type: ['line', 'bar'] },
+      restore: { show: false },
+      saveAsImage: { show: true }
+    }
+  },
+  calculable: true,
+  xAxis: [
+    {
+      type: 'category',
+      data: [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ]
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value'
+    }
+  ],
+  series: [
+    {
+      name: 'Enrolled',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: defenseEnrolled,
+      itemStyle: {
+        color: '#6069f3',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    },
+    {
+      name: 'Completed',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: defenseCompleted,
+      itemStyle: {
+        color: '#fb8d35',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    }
+  ]
+};
+
+defenseEnrolledVSCompletion.setOption(defenseEnrolledVSCompletion_Options);
+
+
+
+//  Others V/S Completion Status
+var othersEnrolledVSCompletion = echarts.init(document.getElementById('Others Enrolled V/s Completion'));
+
+
+  // Data fetched from PHP
+  var OthersCompleted = <?php echo $OthersCompleted; ?>;
+  var OthersEnrolled = <?php echo $OthersEnrolled; ?>;
+
+
+
+ var othersEnrolledVSCompletion_Options = {
+  title: {
+    text: 'Others Enrolled V/S Completed'
+  },
+  tooltip: {
+    trigger: 'axis'
+  },
+  legend: {
+    right: '10%',
+    data: [
+      { name: 'Enrolled', icon: 'circle', textStyle: { color: 'black' } },
+      { name: 'Completed', icon: 'circle', textStyle: { color: 'black' } }
+    ]
+  },
+  toolbox: {
+    show: true,
+    feature: {
+      dataView: { show: true, readOnly: false },
+      magicType: { show: false, type: ['line', 'bar'] },
+      restore: { show: false },
+      saveAsImage: { show: true }
+    }
+  },
+  calculable: true,
+  xAxis: [
+    {
+      type: 'category',
+      data: [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ]
+    }
+  ],
+  yAxis: [
+    {
+      type: 'value'
+    }
+  ],
+  series: [
+    {
+      name: 'Enrolled',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: OthersEnrolled,
+      itemStyle: {
+        color: '#6069f3',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    },
+    {
+      name: 'Completed',
+      type: 'bar',
+      barWidth: 10, // Adjust the width as needed
+      data: OthersCompleted,
+      itemStyle: {
+        color: '#fb8d35',
+        borderRadius: [8, 8, 0 , 0]
+      }
+    }
+  ]
+};
+
+othersEnrolledVSCompletion.setOption(othersEnrolledVSCompletion_Options);
+
+
+
+
+</script>
+
 
 </body>
+</html>
+
+
+
+
+
+
+

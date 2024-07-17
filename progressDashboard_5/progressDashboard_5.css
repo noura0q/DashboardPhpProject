@@ -59,13 +59,6 @@ body {
 }
 
 
-.number {
-    font-size: 16px; /* Decrease number font size */
-    font-weight: bold;
-    color: #000;
-    text-align: left;
-}
-
 /* New styles similar to the provided example */
 
 .box-content .big {
@@ -117,12 +110,7 @@ table {
 
 }
 
-caption {
-    font-weight: bold;
-    text-align: left; /* Align caption text to the left */
-    padding: 10px; /* Optional: Add padding to the caption */
-    background-color: white; /* Optional: Set a background color */
-}
+
 th, td {
     padding: 8px;
     text-align: left;
