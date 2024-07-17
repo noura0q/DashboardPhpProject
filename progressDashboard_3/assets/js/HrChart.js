@@ -109,7 +109,7 @@ var experienceOption = {
                     color: 'rgba(0,0,0,0.05)' // Light color on hover for emphasis
                 }
             },
-            data: [0, 0, 0, 0] // Placeholder data for the total bar, adjust as needed
+            data: [] // Placeholder data for the total bar, adjust as needed
         }
     ]
 };
@@ -135,7 +135,7 @@ var HROption = {
         trigger: 'axis'
     },
     legend: {
-        data: ['Rainfall', 'Evaporation']
+        data: ['Enrolled', 'Completion']
     },
     toolbox: {
         show: true,
@@ -160,11 +160,15 @@ var HROption = {
     ],
     series: [
         {
-            name: 'Rainfall',
+            name: 'Enrolled',
             type: 'bar',
             data: [
                 2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3
             ],
+            itemStyle: {  // Customize bar style
+                color: '#6169F3 ' ,
+                barBorderRadius: [5, 5, 0, 0]
+            },
             markPoint: {
                 data: [
                     { type: 'max', name: 'Max' },
@@ -176,11 +180,15 @@ var HROption = {
             }
         },
         {
-            name: 'Evaporation',
+            name: 'Completion',
             type: 'bar',
             data: [
                 2.6, 5.9, 9.0, 26.4, 28.7, 70.7, 175.6, 182.2, 48.7, 18.8, 6.0, 2.3
             ],
+            itemStyle: {  // Customize bar style
+                color: ' #FD8D35',  // Change bar color here
+                barBorderRadius: [5, 5, 0, 0]
+            },
             markPoint: {
                 data: [
                     { name: 'Max', value: 182.2, xAxis: 7, yAxis: 183 },
@@ -199,7 +207,6 @@ HRChart.setOption(HROption);
 
 
 // Education Details chart
-// Initialize the echarts instance based on the prepared dom
 // Initialize the echarts instance based on the prepared dom
 var EducationChart = echarts.init(document.getElementById('Education'));
 
@@ -234,16 +241,7 @@ var EducationOption = {
             itemStyle: {
                 borderRadius: 8
             },
-            data: [
-                { value: 40, name: 'rose 1' },
-                { value: 38, name: 'rose 2' },
-                { value: 32, name: 'rose 3' },
-                { value: 30, name: 'rose 4' },
-                { value: 28, name: 'rose 5' },
-                { value: 26, name: 'rose 6' },
-                { value: 22, name: 'rose 7' },
-                { value: 18, name: 'rose 8' }
-            ]
+            data: []
         }
     ]
 };
@@ -353,13 +351,7 @@ regionOption = {
         labelLine: {
           show: false
         },
-        data: [
-          { value: 1048, name: 'Search Engine' },
-          { value: 735, name: 'Direct' },
-          { value: 580, name: 'Email' },
-          { value: 484, name: 'Union Ads' },
-          { value: 300, name: 'Video Ads' }
-        ]
+        data: []
       }
     ]
   };
@@ -412,6 +404,5 @@ fetchData();
 
 // Optionally, set interval to refresh data every x milliseconds if needed
 // setInterval(fetchData, 60000); // Example: Refresh data every minute
-
 
 

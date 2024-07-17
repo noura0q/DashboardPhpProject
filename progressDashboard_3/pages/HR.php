@@ -13,6 +13,15 @@ if ($result->num_rows > 0) {
     echo "0 results";
 }
 
+
+// Fetch city wise distribution data
+$sql_city = "SELECT city_name, num_employees FROM city_wise_distribution";
+$result_city = $conn->query($sql_city);
+
+// Fetch company wise distribution data
+$sql_company = "SELECT company_name, num_employees FROM company_wise_distribution";
+$result_company = $conn->query($sql_company);
+
 $conn->close();
 ?>
 
@@ -106,72 +115,53 @@ $conn->close();
 
         </div>
         <div class="dashboard-container">
-            <div class="scroll-pane dashboard-item" id="Education" style="width: 550px;height:250px; ">
+            <div class="scroll-pane dashboard-item" id="Education" style="width: 550px;height:400px; ">
                 <table>
                     <caption>City Wise Distribution</caption>
-                    <tr>
-                        <td>Riyadh</td>
-                        <td>53,000</td>
-                    </tr>
-                    <tr>
-                        <td>Jeddah</td>
-                        <td>51,000</td>
-                    </tr>
-                    <tr>
-                        <td>Dammam</td>
-                        <td>20,000</td>
-                    </tr>
-                    <tr>
-                        <td>Makkah</td>
-                        <td>10,000</td>
-                    </tr>
-                    <tr>
-                        <td>Buraydah</td>
-                        <td>15,000</td>
-                    </tr>
-                    <tr>
-                        <td>Madina</td>
-                        <td>8,000</td>
-                    </tr>
-                    <!-- Add more rows here as needed -->
+                    <thead>
+                        <tr>
+                            <th>City Name</th>
+                            <th>Number of Employees</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result_city->num_rows > 0) {
+                            while ($row = $result_city->fetch_assoc()) {
+                                echo "<tr><td>" . $row["city_name"] . "</td><td>" . $row["num_employees"] . "</td></tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='2'>No data found</td></tr>";
+                        }
+                        ?>
+                    </tbody>
                 </table>
             </div>
 
-            <div class="scroll-pane dashboard-item" id="Education" style="width: 550px;height:250px; ">
+            <div class="scroll-pane dashboard-item" id="Education" style="width: 550px;height:400px; ">
                 <table>
                     <caption>Company Wise Distribution</caption>
-                    <tr>
-                        <td>IBM</td>
-                        <td>53,000</td>
-                    </tr>
-                    <tr>
-                        <td>Accenture</td>
-                        <td>51,000</td>
-                    </tr>
-                    <tr>
-                        <td>Microsoft</td>
-                        <td>20,000</td>
-                    </tr>
-                    <tr>
-                        <td>Cisco</td>
-                        <td>10,000</td>
-                    </tr>
-                    <tr>
-                        <td>Wipro</td>
-                        <td>15,000</td>
-                    </tr>
-                    <tr>
-
-                        <!-- Add more rows here as needed -->
+                    <thead>
+                        <tr>
+                            <th>City Name</th>
+                            <th>Number of Employees</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($result_company->num_rows > 0) {
+                            while ($row = $result_company->fetch_assoc()) {
+                                echo "<tr><td>" . $row["company_name"] . "</td><td>" . $row["num_employees"] . "</td></tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='2'>No data found</td></tr>";
+                        }
+                        ?>
+                    </tbody>
                 </table>
             </div>
         </div>
-
-
-
-
     </div>
-
     </div>
     <script src="../assets/js/HrChart.js"></script>
     <script src="../assets/js/main.js"></script>

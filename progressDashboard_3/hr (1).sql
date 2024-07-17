@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 16, 2024 at 01:01 PM
+-- Generation Time: Jul 17, 2024 at 11:26 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -41,6 +41,56 @@ INSERT INTO `certificates` (`certificate_id`, `learner_id`, `issue_date`) VALUES
 (1, 1, '2023-03-02'),
 (2, 2, '2023-04-11'),
 (3, 4, '2023-05-16');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `city_wise_distribution`
+--
+
+CREATE TABLE `city_wise_distribution` (
+  `id` int(11) NOT NULL,
+  `city_name` varchar(255) NOT NULL,
+  `num_employees` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `city_wise_distribution`
+--
+
+INSERT INTO `city_wise_distribution` (`id`, `city_name`, `num_employees`) VALUES
+(1, 'Riyadh', 1200),
+(2, 'Jeddah', 850),
+(3, 'Dammam', 450),
+(4, 'Mecca', 600),
+(5, 'Medina', 500);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `company_wise_distribution`
+--
+
+CREATE TABLE `company_wise_distribution` (
+  `id` int(11) NOT NULL,
+  `company_name` varchar(255) NOT NULL,
+  `num_employees` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `company_wise_distribution`
+--
+
+INSERT INTO `company_wise_distribution` (`id`, `company_name`, `num_employees`) VALUES
+(6, 'Company A', 100),
+(7, 'Company B', 250),
+(8, 'Company C', 75),
+(9, 'Company A', 100),
+(10, 'Company B', 250),
+(11, 'Company C', 75),
+(13, 'Company C', 75),
+(14, 'Company A', 100),
+(16, 'Company C', 75);
 
 -- --------------------------------------------------------
 
@@ -221,6 +271,18 @@ ALTER TABLE `certificates`
   ADD KEY `learner_id` (`learner_id`);
 
 --
+-- Indexes for table `city_wise_distribution`
+--
+ALTER TABLE `city_wise_distribution`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `company_wise_distribution`
+--
+ALTER TABLE `company_wise_distribution`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `education_details`
 --
 ALTER TABLE `education_details`
@@ -271,6 +333,18 @@ ALTER TABLE `learners_experience`
 --
 ALTER TABLE `certificates`
   MODIFY `certificate_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `city_wise_distribution`
+--
+ALTER TABLE `city_wise_distribution`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `company_wise_distribution`
+--
+ALTER TABLE `company_wise_distribution`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `education_details`
