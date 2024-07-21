@@ -8,6 +8,66 @@
 </head>
 
 <body>
+<?php
+   $host="localhost";
+   $user="root";
+   $password="";
+   $dbNAME="dashboard2";
+
+$con= mysqli_connect($host,$user,$password,$dbNAME);
+// SQL query to retrieve data from EducationDetails table
+$query = "SELECT education_level, value FROM educationdetails";
+$result = mysqli_query($con, $query);
+
+// Prepare data for the chart
+$data2 = [];
+while ($row = mysqli_fetch_assoc($result)) {
+    $data2[] = [
+        'value' => $row['value'],
+        'name' => $row['education_level']
+    ];
+}
+mysqli_free_result($result);
+
+
+// Fetch data from MoEData table
+$queryFetchData = "SELECT * FROM MoEData";
+$result = mysqli_query($con, $queryFetchData);
+
+// Prepare arrays to hold data for chart
+$months = array();
+$enrolledData = array();
+$completionData = array();
+
+while ($row = mysqli_fetch_assoc($result)) {
+    $months[] = $row['month'];
+    $enrolledData[] = floatval($row['enrolled']);
+    $completionData[] = floatval($row['completion']);
+}
+// Query to fetch data from KsaRegionWiseLearners table
+$query1 = "SELECT region_name, learner_count FROM ksaregionwiselearners";
+$result1= mysqli_query($con, $query1);
+
+// Prepare data arrays for ECharts
+$regions = [];
+$data = [];
+
+while ($row = mysqli_fetch_assoc($result1)) {
+    $regions[] = $row['region_name'];
+    $data[] = [
+        'value' => intval($row['learner_count']),
+        'name' => $row['region_name']
+    ];
+}
+
+$res= mysqli_query($con,"select * from citywisedistribution");
+$res2= mysqli_query($con,"select * from UniversityWiseDistribution ");
+
+mysqli_close($con);
+?>
+
+
+
     <div class="AimsRegistrationDashboard">
     </div>
     <div class="Group1171278554">
@@ -165,68 +225,44 @@
     </div></div></div>
     <div class="dashboard-container"> 
             <div class="scroll-pane dashboard-item" style="width: 550px;height:300px; "> 
-                <table> 
-                    <caption>City Wise Distribution </caption> 
-                    <tr> 
-                
-            </tr> 
-            <tr> 
-                <td>Riyadh</td> 
-                <td>53,000</td> 
-            </tr> 
-            <tr> 
-                <td>Jeddah</td> 
-                <td>51,000</td> 
-            </tr> 
-            <tr> 
-                <td>Dammam</td> 
-                <td>20,000</td> 
-            </tr> 
-            <tr> 
-                <td>Makkah</td> 
-                <td>10,000</td> 
-            </tr> 
-            <tr> 
-                <td>Madina</td> 
-                <td>15,000</td> 
-            </tr> 
-            <tr> 
-                <td>tabuk</td> 
-                <td>8,000</td> 
-            </tr> 
-            <tr> 
-                <td>Taif</td> 
-                <td>5,000</td> 
-            </tr> 
-                    <!-- Add more rows here as needed --> 
-                </table> 
+            <table>
+                    <caption>City Wise Distribution</caption>
+                    <tr>
+                   </tr>
+                <?php
+      
+      while ($row = mysqli_fetch_assoc($res)){
+          echo "<tr>";
+        
+         echo "<td>" . $row['city_name']. "</td>";
+         echo "<td>" . $row['distribution_count']. "</td>";
+       
+           echo "</tr>";
+      
+      }
+?>
+                    <!-- Add more rows here as needed -->
+                </table>
             </div> 
- 
+ <!-- table2 -->
             <div class="scroll-pane dashboard-item"  style="width: 550px;height:300px; "> 
                 <table> 
                     <caption>University Wise Distribution</caption> 
                     <tr>  
+                   
             </tr> 
-            <tr> 
-                <td>King Saud</td> 
-                <td>53,000</td> 
-            </tr> 
-            <tr> 
-                <td>Umm Al-Qura</td> 
-                <td>51,000</td> 
-            </tr> 
-            <tr> 
-                <td>King Abdul Aziz</td> 
-                <td>20000</td> 
-            </tr> 
-            <tr> 
-                <td>Imam Saud</td> 
-                <td>12000</td> 
-            </tr> 
-            <tr> 
-                <td>Prince Muqrin</td> 
-                <td>10000</td> 
-            </tr>   
+            <?php
+      
+      while ($row = mysqli_fetch_assoc($res2)){
+          echo "<tr>";
+        
+         echo "<td>" . $row['university_name']. "</td>";
+         echo "<td>" . $row['student_count']. "</td>";
+       
+           echo "</tr>";
+      
+      }
+?> 
                     <!-- Add more rows here as needed --> 
                 </table> 
             </div> 
@@ -240,6 +276,166 @@
     </div>
 
         </div>
+        <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var nightingaleChartDom = document.getElementById('main');
+            var nightingaleChart = echarts.init(nightingaleChartDom);
+
+            var nightingaleOption = {
+                title: {
+                    text: "Education details",
+                    textStyle: {
+                        fontSize: 16,
+                        fontWeight: 'bold'
+                    }
+                },
+                legend: {
+                    top: 'bottom'
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        mark: { show: true },
+                        dataView: { show: true, readOnly: false },
+                        restore: { show: true },
+                        saveAsImage: { show: true }
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{b}: {c} ({d}%)'
+                },
+                series: [
+                    {
+                        name: 'Nightingale Chart',
+                        type: 'pie',
+                        radius: [30, 150],
+                        center: ['50%', '50%'],
+                        roseType: 'area',
+                        itemStyle: {
+                            borderRadius: 8
+                        },
+                        label: {
+                            show: true,
+                            formatter: '{b}'
+                        },
+                        data: <?php echo json_encode($data2); ?> // Dynamic data from PHP
+                    }
+                ]
+            };
+
+            nightingaleChart.setOption(nightingaleOption);
+        });
+    </script>
+
+     <script>
+        // Initialize ECharts instance
+        var enrollmentCompletionChartDom = document.getElementById('main1');
+        var enrollmentCompletionChart = echarts.init(enrollmentCompletionChartDom);
+
+        // Option for MoE Enrolled vs Completion Chart
+        var enrollmentCompletionOption = {
+            title: {
+                text: 'MoE Enrolled V/s Completion'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            legend: {
+                data: ['Enrolled', 'Completion']
+            },
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            calculable: true,
+            xAxis: [
+                {
+                    type: 'category',
+                    data: <?php echo json_encode($months); ?> // Dynamically fetched from PHP
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                }
+            ],
+            series: [
+                {
+                    name: 'Enrolled',
+                    type: 'bar',
+                    data: <?php echo json_encode($enrolledData); ?> // Dynamically fetched from PHP
+                },
+                {
+                    name: 'Completion',
+                    type: 'bar',
+                    data: <?php echo json_encode($completionData); ?> // Dynamically fetched from PHP
+                }
+            ]
+        };
+
+        // Set the option to the chart instance
+        enrollmentCompletionChart.setOption(enrollmentCompletionOption);
+    </script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var accessFromChartDom = document.getElementById('main2');
+            var accessFromChart = echarts.init(accessFromChartDom);
+
+            var accessFromOption = {
+                title:{
+                    text:"KSA Region Wise Learners’ Distribution",
+                    textStyle:{
+                        fontSize:16,
+                        fontWeight:'bold'
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: '{a} <br/>{b}: {c} ({d}%)'
+                },
+                legend: {
+                    top: '5%',
+                    left: 'center'
+                },
+                series: [
+                    {
+                        name: 'Access From',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 14,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: <?php echo json_encode($data); ?> // Dynamic data from PHP
+                    }
+                ]
+            };
+
+            accessFromChart.setOption(accessFromOption);
+        });
+    </script>
 </body>
 </html>
 
