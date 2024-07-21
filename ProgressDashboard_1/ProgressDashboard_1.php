@@ -1,11 +1,13 @@
 <?php
 include '../dbConnection.php';
+include '../fetchKPIs.php';
+
 
 //QUERY Fetch overall learners completion status (half pie chart)
 $sql = "SELECT 
 SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) AS total_completed,
 SUM(CASE WHEN status = 'incompleted' THEN 1 ELSE 0 END) AS total_incompleted
-FROM user_courses;";
+FROM Course;";
 
 $result = $conn->query($sql);
 
@@ -21,14 +23,14 @@ if ($result->num_rows > 0) {
 
 
 //QUERY Fetch learners completion status by domain (bar chart)
-$sql2 = "SELECT user_domain, COUNT(*) AS completed_count FROM learners WHERE user_id IN ( SELECT user_id FROM user_courses WHERE status = 'completed' ) GROUP BY user_domain;";
+$sql2 = "SELECT Domain, COUNT(*) AS completed_count FROM Learner WHERE user_id IN ( SELECT user_id FROM Course WHERE status = 'completed' ) GROUP BY Domain;";
 
 $result2 = $conn->query($sql2);
 
 // Fetch data from SQL result
 $data = array();
 while ($row = $result2->fetch_assoc()) {
-    $domain = $row['user_domain'];
+    $domain = $row['Domain'];
     $completed_count = $row['completed_count'];
     $data[$domain] = $completed_count;
 }
@@ -37,14 +39,14 @@ while ($row = $result2->fetch_assoc()) {
 $learnersCompletionData = json_encode(array_values($data));
 
 //QUERY Fetch learners completion status by domain (bar chart)
-$sql3 = "SELECT YEAR(uc.EnrolmentDate) AS year, 
-                MONTH(uc.EnrolmentDate) AS month, 
+$sql3 = "SELECT YEAR(uc.enrolment_date) AS year, 
+                MONTH(uc.enrolment_date) AS month, 
                 SUM(CASE WHEN uc.status = 'completed' THEN 1 ELSE 0 END) AS completed_count, 
                 SUM(CASE WHEN uc.status != 'completed' THEN 1 ELSE 0 END) AS incompleted_count 
-         FROM learners l 
-         JOIN user_courses uc ON l.user_id = uc.user_id 
-         WHERE l.user_domain = 'HR' 
-         GROUP BY YEAR(uc.EnrolmentDate), MONTH(uc.EnrolmentDate) 
+         FROM Learner l 
+         JOIN Course uc ON l.user_id = uc.user_id 
+         WHERE l.Domain = 'HR' 
+         GROUP BY YEAR(uc.enrolment_date), MONTH(uc.enrolment_date) 
          ORDER BY year, month 
          LIMIT 0, 25;";
 
@@ -64,14 +66,14 @@ $HREnrolled = json_encode($incompleted_counts);
 
 
 //QUERY Fetch learners completion status by domain (bar chart)
-$sql4 = "SELECT YEAR(uc.EnrolmentDate) AS year, 
-                MONTH(uc.EnrolmentDate) AS month, 
+$sql4 = "SELECT YEAR(uc.enrolment_date) AS year, 
+                MONTH(uc.enrolment_date) AS month, 
                 SUM(CASE WHEN uc.status = 'completed' THEN 1 ELSE 0 END) AS completed_count, 
                 SUM(CASE WHEN uc.status != 'completed' THEN 1 ELSE 0 END) AS incompleted_count 
-         FROM learners l 
-         JOIN user_courses uc ON l.user_id = uc.user_id 
-         WHERE l.user_domain = 'MoE' 
-         GROUP BY YEAR(uc.EnrolmentDate), MONTH(uc.EnrolmentDate) 
+         FROM Learner l 
+         JOIN Course uc ON l.user_id = uc.user_id 
+         WHERE l.Domain = 'MoE' 
+         GROUP BY YEAR(uc.enrolment_date), MONTH(uc.enrolment_date) 
          ORDER BY year, month 
          LIMIT 0, 25;";
 
@@ -91,14 +93,14 @@ $MoeEnrolled = json_encode($MoEincompleted_counts);
 
 
 //QUERY Fetch learners completion status by domain (bar chart)
-$sql5 = "SELECT YEAR(uc.EnrolmentDate) AS year, 
-                MONTH(uc.EnrolmentDate) AS month, 
+$sql5 = "SELECT YEAR(uc.enrolment_date) AS year, 
+                MONTH(uc.enrolment_date) AS month, 
                 SUM(CASE WHEN uc.status = 'completed' THEN 1 ELSE 0 END) AS completed_count, 
                 SUM(CASE WHEN uc.status != 'completed' THEN 1 ELSE 0 END) AS incompleted_count 
-         FROM learners l 
-         JOIN user_courses uc ON l.user_id = uc.user_id 
-         WHERE l.user_domain = 'Defense' 
-         GROUP BY YEAR(uc.EnrolmentDate), MONTH(uc.EnrolmentDate) 
+         FROM Learner l 
+         JOIN Course uc ON l.user_id = uc.user_id 
+         WHERE l.Domain = 'Defense' 
+         GROUP BY YEAR(uc.enrolment_date), MONTH(uc.enrolment_date) 
          ORDER BY year, month 
          LIMIT 0, 25;";
 
@@ -119,14 +121,14 @@ $DefenseEnrolled = json_encode($Defenseincompleted_counts);
 
 
 //QUERY Fetch learners completion status by domain (bar chart)
-$sql6 = "SELECT YEAR(uc.EnrolmentDate) AS year, 
-                MONTH(uc.EnrolmentDate) AS month, 
+$sql6 = "SELECT YEAR(uc.enrolment_date) AS year, 
+                MONTH(uc.enrolment_date) AS month, 
                 SUM(CASE WHEN uc.status = 'completed' THEN 1 ELSE 0 END) AS completed_count, 
                 SUM(CASE WHEN uc.status != 'completed' THEN 1 ELSE 0 END) AS incompleted_count 
-         FROM learners l 
-         JOIN user_courses uc ON l.user_id = uc.user_id 
-         WHERE l.user_domain = 'Others' 
-         GROUP BY YEAR(uc.EnrolmentDate), MONTH(uc.EnrolmentDate) 
+         FROM Learner l
+         JOIN Course uc ON l.user_id = uc.user_id 
+         WHERE l.Domain = 'Others' 
+         GROUP BY YEAR(uc.enrolment_date), MONTH(uc.enrolment_date) 
          ORDER BY year, month 
          LIMIT 0, 25;";
 
@@ -191,7 +193,7 @@ $OthersEnrolled = json_encode($Othersincompleted_counts);
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Learners Registered</span>
-                        <div class="number">156,821</div>
+                        <div class="number"> <?php echo number_format($kpi_data_LR['user_id']); ?> </div>
                     </div>
                 </div>
             </div>
@@ -215,7 +217,8 @@ $OthersEnrolled = json_encode($Othersincompleted_counts);
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Learners Enrolled</span>
-                        <div class="number">116,456</div>
+                        <div class="number"><?php echo number_format($kpi_data_Enrolled['user_id']); ?> 
+                  </div>
                     </div>
                 </div>
             </div>
@@ -240,7 +243,7 @@ $OthersEnrolled = json_encode($Othersincompleted_counts);
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Certificates Issued</span>
-                        <div class="number">106,450</div>
+                        <div class="number"><?php echo number_format($kpi_data_CI['status']); ?> </div>
                     </div>
                 </div>
             </div>
@@ -263,7 +266,7 @@ $OthersEnrolled = json_encode($Othersincompleted_counts);
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Learners Active</span>
-                        <div class="number">16,021</div>
+                        <div class="number"><?php echo number_format($kpi_data_AL['active_count']); ?></div>
                     </div>
                 </div>
             </div>
@@ -287,7 +290,8 @@ $OthersEnrolled = json_encode($Othersincompleted_counts);
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Avg Time</span>
-                        <div class="number">13 h 22 m</div>
+                        <div class="number"> <?php echo number_format($KPI_data_avg['average_usage_hours']); ?>
+</div>
                     </div>
                 </div>
 

@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "root"; 
-$dbname = "dashboarddb";
+$dbname = "SDAIA_Academy_DashboardDB";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
