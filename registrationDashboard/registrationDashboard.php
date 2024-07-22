@@ -318,7 +318,7 @@ mysqli_close($conn);
     </div>
 
     </div>
-    <div class="dashboard-item" style="width: 700px; height: 400px;">
+    <div class="dashboard-item" style="width:650px; height: 400px;">
 
      <!-- Chart 2 - Profession And Proficiency Level Relation -->
      <div class="chart-container">
@@ -377,7 +377,7 @@ mysqli_close($conn);
 
 
         <div class="dashboard-container">
-        <div class="dashboard-item  " style="width: 700px; height: 400px;" >
+        <div class="dashboard-item  " style="width: 820px; height: 400px;" >
         <table>
 
    <caption>  <h2>Top 5 Cities</h2> </caption>
@@ -391,7 +391,7 @@ mysqli_close($conn);
         </tbody>
     </table>
 </div>
-<div class="dashboard-item  " style="width: 700px; height: 400px;" >
+<div class="dashboard-item  " style="width: 750px; height: 400px;" >
 <table> 
                 <caption> <h2> Top 5 Universities </h2> </caption>
         <tbody>
