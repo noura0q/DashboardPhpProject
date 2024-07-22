@@ -2,8 +2,8 @@
 
 
 <?php
-include './dbConnection.php';
-include './fetchKPIs.php';
+include '../dbConnection.php';
+include '../fetchKPIs.php';
 
 //    $host="localhost";
 //    $user="root";
