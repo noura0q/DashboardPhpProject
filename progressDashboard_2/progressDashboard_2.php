@@ -3,67 +3,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="progressDashboard_2.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
-   
-
 </head>
 
 <body>
 <?php
-   $host="localhost";
-   $user="root";
-   $password="";
-   $dbNAME="dashboard2";
+include 'dbConnection.php';
+include 'fetchKPIs.php';
 
-$con= mysqli_connect($host,$user,$password,$dbNAME);
-// SQL query to retrieve data from EducationDetails table
-$query = "SELECT education_level, value FROM educationdetails";
-$result = mysqli_query($con, $query);
+
+// for education details chart 
+$query = "SELECT educational_level, COUNT(*) as count FROM learner GROUP BY educational_level";
+$result = mysqli_query($conn, $query);
+// $result = $conn->query($result);
 
 // Prepare data for the chart
 $data2 = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $data2[] = [
-        'value' => $row['value'],
-        'name' => $row['education_level']
+        'value' => $row['count'],
+        'name' => $row['educational_level']
     ];
 }
-mysqli_free_result($result);
 
+// Query to get the enrolled count per month for MOE domain
+$sql_enrolled = "SELECT MONTH(Course.enrolment_date) AS month, COUNT(Course.user_id) AS enrolled_count
+                 FROM Course
+                 JOIN Learner ON Course.user_id = Learner.user_id
+                 WHERE Learner.Domain = 'MoE'
+                 GROUP BY MONTH(Course.enrolment_date)";
 
-// Fetch data from MoEData table
-$queryFetchData = "SELECT * FROM MoEData";
-$result = mysqli_query($con, $queryFetchData);
+// $result_enrolled = mysqli_query($con, $sql_enrolled);
+$result_enrolled = $conn->query($sql_enrolled);
 
-// Prepare arrays to hold data for chart
-$months = array();
-$enrolledData = array();
-$completionData = array();
+$enrolledData = array_fill(0, 12, 0); // Initialize an array with 12 zeros
 
-while ($row = mysqli_fetch_assoc($result)) {
-    $months[] = $row['month'];
-    $enrolledData[] = floatval($row['enrolled']);
-    $completionData[] = floatval($row['completion']);
+if ($result_enrolled->num_rows > 0) {
+    while($row_enrolled = $result_enrolled->fetch_assoc()) {
+        $enrolledData[$row_enrolled['month'] - 1] = $row_enrolled['enrolled_count'];
+    }
 }
-// Query to fetch data from KsaRegionWiseLearners table
-$query1 = "SELECT region_name, learner_count FROM ksaregionwiselearners";
-$result1= mysqli_query($con, $query1);
 
-// Prepare data arrays for ECharts
-$regions = [];
-$data = [];
+// Query to get the completed count per month for MoE domain
+$sql_completed = "SELECT MONTH(Course.completion_date) AS month, COUNT(Course.user_id) AS completed_count
+                  FROM Course
+                  JOIN Learner ON Course.user_id = Learner.user_id
+                  WHERE Learner.Domain = 'MoE'
+                  GROUP BY MONTH(Course.completion_date)";
 
+// $result_completed = mysqli_query($con, $sql_completed);
+$result_completed = $conn->query($sql_completed);
+
+$completionData = array_fill(0, 12, 0); // Initialize an array with 12 zeros
+
+if ($result_completed->num_rows > 0) {
+    while($row_completed = $result_completed->fetch_assoc()) {
+        $completionData[$row_completed['month'] - 1] = $row_completed['completed_count'];
+    }
+}
+
+
+// Query to fetch data from learner table
+$query1 = "SELECT city, COUNT(*) AS people_count FROM learner GROUP BY city;";
+$result1= mysqli_query($conn, $query1);
 while ($row = mysqli_fetch_assoc($result1)) {
-    $regions[] = $row['region_name'];
+    $cities[] = $row['city'];
     $data[] = [
-        'value' => intval($row['learner_count']),
-        'name' => $row['region_name']
+        'value' => intval($row['people_count']),
+        'name' => $row['city']
     ];
 }
 
-$res= mysqli_query($con,"select * from citywisedistribution");
-$res2= mysqli_query($con,"select * from UniversityWiseDistribution ");
+//For table city
+$res = mysqli_query($conn, "SELECT city, COUNT(*) AS count FROM learner GROUP BY city ORDER BY count DESC;");
 
-mysqli_close($con);
+// for table MoE 
+$res2 = mysqli_query($conn, " SELECT subdomain, COUNT(*) AS subdomain_count FROM Learner WHERE Domain = 'MoE' GROUP BY subdomain ORDER BY subdomain_count DESC;");
+
+mysqli_close($conn);
 ?>
 
 
@@ -92,7 +108,7 @@ mysqli_close($con);
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Learners Registered</span>
-                        <div class="number">156,821</div>
+                        <div class="number"> <?php echo number_format($kpi_data_LR['user_id']); ?></div>
                     </div>
                 </div>
             </div>
@@ -115,8 +131,8 @@ mysqli_close($con);
                 </div>
                 <div class="text-container">
                     <div class="box-content">
-                        <span class="big">Learners Enrolled</span>
-                        <div class="number">116,456</div>
+                    <span class="big">Learners Enrolled</span>
+                    <div class="number"><?php echo number_format($kpi_data_Enrolled['user_id']); ?> </div>
                     </div>
                 </div>
             </div>
@@ -140,8 +156,8 @@ mysqli_close($con);
                 </div>
                 <div class="text-container">
                     <div class="box-content">
-                        <span class="big">Certificates Issued</span>
-                        <div class="number">106,450</div>
+                    <span class="big">Certificates Issued</span>
+                    <div class="number"><?php echo number_format($kpi_data_CI['status']); ?></div>
                     </div>
                 </div>
             </div>
@@ -163,8 +179,8 @@ mysqli_close($con);
                     </svg> </div>
                 <div class="text-container">
                     <div class="box-content">
-                        <span class="big">Learners Active</span>
-                        <div class="number">16,021</div>
+                    <span class="big">Learners Active</span>
+                    <div class="number"><?php echo number_format($kpi_data_AL['active_count']); ?></div>
                     </div>
                 </div>
             </div>
@@ -187,8 +203,8 @@ mysqli_close($con);
                 </div>
                 <div class="text-container">
                     <div class="box-content">
-                        <span class="big">Avg Time</span>
-                        <div class="number">13 h 22 m</div>
+                    <span class="big">Avg Time</span>
+                    <div class="number">hh</div>
                     </div>
                 </div>
 
@@ -234,8 +250,8 @@ mysqli_close($con);
       while ($row = mysqli_fetch_assoc($res)){
           echo "<tr>";
         
-         echo "<td>" . $row['city_name']. "</td>";
-         echo "<td>" . $row['distribution_count']. "</td>";
+         echo "<td>" . $row['city']. "</td>";
+         echo "<td>" . $row['count']. "</td>";
        
            echo "</tr>";
       
@@ -256,8 +272,8 @@ mysqli_close($con);
       while ($row = mysqli_fetch_assoc($res2)){
           echo "<tr>";
         
-         echo "<td>" . $row['university_name']. "</td>";
-         echo "<td>" . $row['student_count']. "</td>";
+         echo "<td>" . $row['subdomain']. "</td>";
+         echo "<td>" . $row['subdomain_count']. "</td>";
        
            echo "</tr>";
       
