@@ -1,3 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+<?php
+include '../dbConnection.php';
+include '../fetchKPis.php';
+
+
+
+// Query (Ksa Region Wise Learners Distribution) 
+$sql2 = "SELECT city, COUNT(*) AS count FROM learner GROUP BY city";
+$result2 = $conn->query($sql2);
+
+$regionCounts = array();
+$regionNames = array();
+
+if ($result2->num_rows > 0) {
+    while ($row = $result2->fetch_assoc()) {
+        $regionCounts[$row["city"]] = $row["count"];
+        $regionNames[] = $row["city"];
+    }
+}
+
+
+
+
+// Query (Proffesion and proficiency level relation) 
+
+$sql8 = "SELECT profession, SUM(CASE WHEN Domain = 'MoE' THEN 1 ELSE 0 END) AS moe,
+               SUM(CASE WHEN Domain = 'HR' THEN 1 ELSE 0 END) AS hr,
+               SUM(CASE WHEN Domain = 'Defense' THEN 1 ELSE 0 END) AS defense
+        FROM learner
+        GROUP BY profession";
+$result8 = $conn->query($sql8);
+
+$professions = [];
+$moe_data = [];
+$hr_data = [];
+$defense_data = [];
+
+if ($result8->num_rows > 0) {
+    while ($row = $result8->fetch_assoc()) {
+        $professions[] = $row["profession"];
+        $moe_data[] = $row["moe"];
+        $hr_data[] = $row["hr"];
+        $defense_data[] = $row["defense"];
+    }
+}
+
+
+
+
+//Query code (course completion)
+$sql7 = "
+SELECT
+    DATE_FORMAT(completion_date, '%b') AS month,
+    COUNT(*) AS completions
+FROM
+    course
+GROUP BY
+    month
+ORDER BY
+    MONTH(completion_date);
+";
+
+$result7 = $conn->query($sql7);
+
+$monthlData = [];
+$course_completionData = [];
+
+if ($result7->num_rows > 0) {
+    while ($row = $result7->fetch_assoc()) {
+        $monthlData[] = $row["month"];
+        $course_completionData[] = $row["completions"];
+    }
+} else {
+    $monthlData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    $course_completionData = array_fill(0, 12, 0);
+}
+
+
+
+
+
+//Query (Inrolled in course)
+$sql6 = "SELECT 
+    DATE_FORMAT(enrolment_date, '%b') AS month,
+    COUNT(*) AS total_enrolled
+FROM course
+GROUP BY month
+ORDER BY MONTH(enrolment_date);";
+
+$result6 = $conn->query($sql6);
+
+$months = [];
+$enrolled_per_month = [];
+
+if ($result6->num_rows > 0) {
+    while ($row = $result6->fetch_assoc()) {
+        $months[] = $row["month"];
+        $enrolled_per_month[] = intval($row["total_enrolled"]);
+    }
+} else {
+    $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    $enrolled_per_month = array_fill(0, 12, 0);
+}
+
+
+
+//Query (Education details)
+$sql3 = "SELECT educational_level, COUNT(*) AS count FROM learner GROUP BY educational_level";
+$result3 = $conn->query($sql3);
+
+$education_detailsCounts = array();
+$education_detailsNames = array();
+
+if ($result3->num_rows > 0) {
+    while ($row = $result3->fetch_assoc()) {
+        $education_detailsCounts[$row["educational_level"]] = $row["count"];
+        $education_detailsNames[] = $row["educational_level"];
+    }
+}
+
+
+
+// query (Males and Females)
+$sql = "SELECT gender, COUNT(*) as count FROM learner GROUP BY gender";
+$result = $conn->query($sql);
+
+$femaleCount = 0;
+$maleCount = 0;
+if ($result->num_rows > 0) {
+    // Fetch data and store in variables
+    while ($row = $result->fetch_assoc()) {
+        if ($row['gender'] == 'Female') {
+            $femaleCount = $row['count'];
+        } else if ($row['gender'] == 'Male') {
+            $maleCount = $row['count'];
+        }
+    }
+} else {
+    echo "0 results";
+}
+
+
+
+
+
+//Query  (Top 3 domain)
+$sql = "SELECT domain, COUNT(*) AS count 
+ FROM learner
+ GROUP BY domain
+ ORDER BY count DESC
+ LIMIT 3";
+
+$result = $conn->query($sql);
+
+// Prepare data for ECharts
+$domains = array();
+$counts = array();
+
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $domains[] = $row["domain"];
+        $counts[] = $row["count"];
+    }
+} else {
+    echo "No data found.";
+}
+
+
+
+
+
+//Query (Years of experience)
+$sql10 = "SELECT 
+            CASE 
+                WHEN years_of_experience BETWEEN 0 AND 2 THEN '0-2'
+                WHEN years_of_experience BETWEEN 3 AND 4 THEN '3-4'
+                WHEN years_of_experience BETWEEN 5 AND 10 THEN '5-10'
+                ELSE '10+'
+            END AS experience_range,
+            COUNT(*) as count
+        FROM learner
+        GROUP BY experience_range";
+
+$result10 = $conn->query($sql10);
+
+$data10 = array("0-2" => 0, "3-4" => 0, "5-10" => 0, "10+" => 0);
+
+if ($result10->num_rows > 0) {
+    while ($row = $result10->fetch_assoc()) {
+        $data10[$row["experience_range"]] = $row["count"];
+    }
+}
+
+
+
+//Query (Month wise active learners)
+$sql5 = "
+SELECT
+    DATE_FORMAT(active_date, '%b') AS month,
+    COUNT(*) AS active_learners
+FROM
+    learner
+WHERE
+    activity = 'active'
+GROUP BY
+    month
+ORDER BY
+    month (active_date);
+";
+
+$result5 = $conn->query($sql5);
+
+if ($result5->num_rows > 0) {
+    // Prepare the data for the Echarts chart
+    $month5Data = [];
+    $activeLearnersData = [];
+    while ($row = $result5->fetch_assoc()) {
+        $month5Data[] = $row["month"];
+        $activeLearnersData[] = $row["active_learners"];
+    }
+} else {
+    $month5Data = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    $activeLearnersData = array_fill(0, 12, 0);
+}
+
+
+
+
+
+//Query (Month wise regestration)
+
+$sql4 = "
+SELECT
+    DATE_FORMAT(registration_date, '%b') AS month,
+    COUNT(*) AS registrations
+FROM learner
+GROUP BY month
+ORDER BY month(registration_date);
+";
+
+$result4 = $conn->query($sql4);
+
+$monthlyData = [];
+$RegistrationData = [];
+
+if ($result4->num_rows > 0) {
+    while ($row = $result4->fetch_assoc()) {
+        $monthlyData[] = $row["month"];
+        $RegistrationData[] = $row["registrations"];
+    }
+} else {
+    $monthlyData = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    $RegistrationData = array_fill(0, 12, 0);
+}
+
+
+
+// Query (City,university and company wise distribution)
+$res = mysqli_query($conn, "SELECT city, COUNT(*) AS user_id FROM learner GROUP BY city ORDER BY user_id DESC;");
+$res2 = mysqli_query($conn, "SELECT subdomain, COUNT(*) AS user_id 
+                            FROM learner 
+                            WHERE subdomain LIKE '%university%'
+                            GROUP BY subdomain
+                            ORDER BY user_id DESC;");
+$res3 = mysqli_query($conn, "SELECT subdomain, COUNT(*) AS user_id 
+FROM learner
+WHERE subdomain NOT LIKE '%university%'
+GROUP BY subdomain
+ORDER BY user_id DESC;");
+
+
+
+
+
+?>
+
+
+
+
+
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -30,7 +315,7 @@
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Learners Registered</span>
-                        <div class="number">156,821</div>
+                        <div class="number"><?php echo number_format($kpi_data_LR['user_id']); ?> </div>
                     </div>
                 </div>
             </div>
@@ -54,7 +339,7 @@
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Learners Enrolled</span>
-                        <div class="number">116,456</div>
+                        <div class="number"><?php echo number_format($kpi_data_Enrolled['user_id']); ?> </div>
                     </div>
                 </div>
             </div>
@@ -79,7 +364,7 @@
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Certificates Issued</span>
-                        <div class="number">106,450</div>
+                        <div class="number"><?php echo number_format($kpi_data_CI['status']); ?> </div>
                     </div>
                 </div>
             </div>
@@ -102,7 +387,7 @@
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Learners Active</span>
-                        <div class="number">16,021</div>
+                        <div class="number"><?php echo number_format($kpi_data_AL['active_count']); ?></div>
                     </div>
                 </div>
             </div>
@@ -126,7 +411,7 @@
                 <div class="text-container">
                     <div class="box-content">
                         <span class="big">Avg Time</span>
-                        <div class="number">13 h 22 m</div>
+                        <div class="number"><?php echo number_format($KPI_data_avg['average_usage_hours']); ?></div>
                     </div>
                 </div>
 
@@ -151,7 +436,7 @@
             <div class='dashboard-item' id='Education Details' style="width: 700px;height:400px;"> </div>
             <div class="dashboard-item  " id="gender" style="width: 700px;height:400px; ">
             </div>
-          
+
             <div class="dashboard-item  " id="top3Domains" style="width: 700px;height:400px; ">
             </div>
 
@@ -173,6 +458,9 @@
 
         </div>
 
+
+
+
         <div class="dashboard-container">
             <div class='dashboard-item' id='City Wise Distribution' style="width: 400px;height:350px;">
                 <div class="scroll-pane dashboard-item" style="width: 550px;height:300px; ">
@@ -182,35 +470,17 @@
                             <th>City</th>
                             <th></th>
                         </tr>
-                        <tr>
-                            <td>Riyadh</td>
-                            <td>53,000</td>
-                        </tr>
-                        <tr>
-                            <td>Jeddah</td>
-                            <td>51,000</td>
-                        </tr>
-                        <tr>
-                            <td>Dammam</td>
-                            <td>20,000</td>
-                        </tr>
-                        <tr>
-                            <td>Makkah</td>
-                            <td>10,000</td>
-                        </tr>
-                        <tr>
-                            <td>Madina</td>
-                            <td>15,000</td>
-                        </tr>
-                        <tr>
-                            <td>tabuk</td>
-                            <td>8,000</td>
-                        </tr>
-                        <tr>
-                            <td>Taif</td>
-                            <td>5,000</td>
-                        </tr>
-                        <!-- Add more rows here as needed -->
+                        <?php
+
+                        while ($row = mysqli_fetch_assoc($res)) {
+                            echo "<tr>";
+
+                            echo "<td>" . $row['city'] . "</td>";
+                            echo "<td>" . $row['user_id'] . "</td>";
+
+                            echo "</tr>";
+                        }
+                        ?>
                     </table>
                 </div>
             </div>
@@ -219,39 +489,23 @@
                 <div class="scroll-pane dashboard-item" style="width: 550px;height:300px; ">
                     <table>
                         <caption>University Wise Distribution</caption>
+
                         <tr>
+
                             <th>University</th>
                             <th></th>
                         </tr>
-                        <tr>
-                            <td>King Saud</td>
-                            <td>53000</td>
-                        </tr>
-                        <tr>
-                            <td>Umm Al-Qura</td>
-                            <td>51,000</td>
-                        </tr>
-                        <tr>
-                            <td>King Abdul Aziz</td>
-                            <td>20,000</td>
-                        </tr>
-                        <tr>
-                            <td>Imam Saud</td>
-                            <td>12000</td>
-                        </tr>
-                        <tr>
-                            <td>Prince Muqrin</td>
-                            <td>10000</td>
-                        </tr>
-                        <tr>
-                            <td>Prince Sattam bin Abdulaziz</td>
-                            <td>8,000</td>
-                        </tr>
-                        <tr>
-                            <td>King Fahd University of Petroleum and Minerals</td>
-                            <td>5,000</td>
-                        </tr>
-                        <!-- Add more rows here as needed -->
+                        <?php
+
+                        while ($row = mysqli_fetch_assoc($res2)) {
+                            echo "<tr>";
+
+                            echo "<td>" . $row['subdomain'] . "</td>";
+                            echo "<td>" . $row['user_id'] . "</td>";
+
+                            echo "</tr>";
+                        }
+                        ?>
                     </table>
                 </div>
             </div>
@@ -263,35 +517,18 @@
                             <th>Company</th>
                             <th></th>
                         </tr>
-                        <tr>
-                            <td>IBM</td>
-                            <td>53,000</td>
-                        </tr>
-                        <tr>
-                            <td>Accenture</td>
-                            <td>51,000</td>
-                        </tr>
-                        <tr>
-                            <td>Microsoft</td>
-                            <td>20,000</td>
-                        </tr>
-                        <tr>
-                            <td>Cisco</td>
-                            <td>10,000</td>
-                        </tr>
-                        <tr>
-                            <td>Wipro</td>
-                            <td>1o,000</td>
-                        </tr>
-                        <tr>
-                            <td>Coursera</td>
-                            <td>8,000</td>
-                        </tr>
-                        <tr>
-                            <td>Nvidia</td>
-                            <td>5,000</td>
-                        </tr>
-                        <!-- Add more rows here as needed -->
+
+                        <?php
+
+                        while ($row = mysqli_fetch_assoc($res3)) {
+                            echo "<tr>";
+
+                            echo "<td>" . $row['subdomain'] . "</td>";
+                            echo "<td>" . $row['user_id'] . "</td>";
+
+                            echo "</tr>";
+                        }
+                        ?>
                     </table>
                 </div>
             </div>
@@ -312,6 +549,780 @@
     </div>
 
     </div>
-    <script src="progressDashboard_main.js"></script>
+
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+
+    </head>
+
+    <script>
+        // Js code (Ksa Region Wise Learners Distribution) 
+        var colorPalette = ['#6169F2', '#2e9dec', '#ec3a48', '#3ba372', '#54a0da', '#e14e59', '#fbc958', '#e33992', '#fc8d36', '#0abca4'];
+
+        var KSaRegionWiseLearners = echarts.init(document.getElementById('Ksa Region Wise Learners Distribution'));
+
+        // Pie Chart Options
+        var KSaRegionWiseLearners_Options = {
+            title: {
+                text: 'KSA Region Wise Learners Distribution',
+                left: 'left'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+            legend: {
+                type: 'scroll',
+                orient: 'horizontal',
+                bottom: '0',
+                data: <?php echo json_encode($regionNames); ?>
+            },
+            series: [{
+                name: 'Learner Distribution',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                center: ['50%', '50%'],
+                color: colorPalette,
+                data: [
+                    <?php
+                    $data = array();
+                    foreach ($regionNames as $region) {
+                        $data[] = "{value: " . $regionCounts[$region] . ", name: '" . $region . "'}";
+                    }
+                    echo implode(",", $data);
+                    ?>
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+
+        KSaRegionWiseLearners.setOption(KSaRegionWiseLearners_Options);
+
+
+
+
+        // Js code (Proffesion and proficiency level relation) 
+        var professions = <?php echo json_encode($professions); ?>;
+        var moeData = <?php echo json_encode($moe_data); ?>;
+        var hrData = <?php echo json_encode($hr_data); ?>;
+        var defenseData = <?php echo json_encode($defense_data); ?>;
+
+        window.onload = function() {
+            var ProfessionAndProficiencyLevelRelation = echarts.init(document.getElementById('Profession And Proficiency Level Relation'));
+
+            var ProfessionAndProficiencyLevelRelation_Options = {
+                title: {
+                    text: 'Profession And Proficiency Level Relation'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    data: ['MoE', 'HR', 'Defense'],
+                    right: '4%',
+                    bottom: '95%'
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '20%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    name: 'Number of Learners',
+                    nameLocation: 'middle',
+                    nameTextStyle: {
+                        align: 'center',
+                        verticalAlign: 'top'
+                    }
+                },
+                yAxis: {
+                    type: 'category',
+                    name: 'Profession',
+                    data: professions
+                },
+                series: [{
+                        name: 'MoE',
+                        type: 'bar',
+                        stack: 'total',
+                        label: {
+                            show: true
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        itemStyle: {
+                            color: '#6169f2'
+                        },
+                        data: moeData
+                    },
+                    {
+                        name: 'HR',
+                        type: 'bar',
+                        stack: 'total',
+                        label: {
+                            show: true
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        itemStyle: {
+                            color: '#fc8d36'
+                        },
+                        data: hrData
+                    },
+                    {
+                        name: 'Defense',
+                        type: 'bar',
+                        stack: 'total',
+                        label: {
+                            show: true
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        itemStyle: {
+                            color: '#0abca4'
+                        },
+                        data: defenseData
+                    }
+                ]
+            };
+
+            ProfessionAndProficiencyLevelRelation.setOption(ProfessionAndProficiencyLevelRelation_Options);
+        };
+
+
+
+
+
+        //Js code (course completion)
+        var CourseComoletion = echarts.init(document.getElementById('Course Comoletion'));
+
+        // Set up the chart options
+        var CourseComoletion_Options = {
+            title: {
+                text: 'Course Completions',
+                left: 'left',
+                top: 20,
+                textStyle: {
+                    fontSize: 18,
+                    fontWeight: 'bold'
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: <?php echo json_encode($monthlData); ?>
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: <?php echo json_encode($course_completionData); ?>,
+                type: 'bar',
+                barWidth: '30%',
+                itemStyle: {
+                    color: '#fd8c36'
+                }
+            }],
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            }
+        };
+
+        CourseComoletion.setOption(CourseComoletion_Options);
+
+
+
+
+
+
+        //Js code (Inrolled in course)
+        var EnrolledInCourse = echarts.init(document.getElementById('Enrolled In Course'));
+
+        // Set up the chart options
+        var EnrolledInCourse_options = {
+            title: {
+                text: 'Enrolled in Course',
+                left: 'left',
+                top: 20,
+                textStyle: {
+                    fontSize: 18,
+                    fontWeight: 'bold'
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: <?php echo json_encode($months); ?>
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: <?php echo json_encode($enrolled_per_month); ?>,
+                type: 'bar',
+                barWidth: '30%',
+                itemStyle: {
+                    color: '#6169f2',
+                    borderRadius: [10, 10, 0, 0]
+                }
+            }],
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            }
+        };
+
+        EnrolledInCourse.setOption(EnrolledInCourse_options);
+
+
+
+
+
+
+        //Js code (Education details)
+        var colorPalette = ['#0abca4',
+            '#2a7af1',
+            '#fc8d36',
+            '#2e9dec',
+            '#6169f2',
+            '#eb3f9b',
+            '#fbc958',
+            '#ec3a48'
+        ];
+
+        var EducationDetails = echarts.init(document.getElementById('Education Details'));
+
+        var EducationDetails_Options = {
+            title: {
+                text: 'Education Details',
+                left: 'left'
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+            },
+
+            legend: {
+                type: 'scroll',
+                orient: 'horizontal',
+                bottom: '0',
+                data: <?php echo json_encode($education_detailsNames); ?>
+            },
+            series: [{
+                name: 'education details',
+                type: 'pie',
+                radius: ['30%', '70%'],
+                center: ['50%', '50%'],
+                color: colorPalette,
+                roseType: 'area',
+                itemStyle: {
+                    borderRadius: 0
+                },
+                data: [
+                    <?php
+                    $data = array();
+                    foreach ($education_detailsNames as $education_details) {
+                        $data[] = "{value: " . $education_detailsCounts[$education_details] . ", name: '" . $education_details . "'}";
+                    }
+                    echo implode(",", $data);
+                    ?>
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }]
+        };
+
+        EducationDetails.setOption(EducationDetails_Options);
+
+
+        // Js code (Males and Females)
+
+        var femaleCount = <?php echo $femaleCount; ?>;
+        var maleCount = <?php echo $maleCount; ?>;
+        var genderChart = echarts.init(document.getElementById('gender'));
+
+        // Specify the configuration items and data for the chart
+        genderOption = {
+            tooltip: {
+                trigger: 'item'
+            },
+            title: {
+                text: 'Male & Female',
+                textStyle: {
+                    fontSize: 16,
+                    fontWeight: 'bold'
+                }
+            },
+            legend: {
+                top: '5%',
+                left: 'center'
+            },
+            color: ['#08bda4', '#fd8d35'],
+            series: [{
+                name: 'Access From',
+                type: 'pie',
+                radius: ['40%', '70%'],
+                avoidLabelOverlap: false,
+                itemStyle: {
+                    borderRadius: 10,
+                    borderColor: '#fff',
+                    borderWidth: 2
+                },
+                label: {
+                    show: false,
+                    position: 'center'
+                },
+                emphasis: {
+                    label: {
+                        show: true,
+                        fontSize: 40,
+                        fontWeight: 'bold'
+                    }
+                },
+                labelLine: {
+                    show: false
+                },
+                data: [{
+                        value: femaleCount,
+                        name: 'female'
+                    },
+                    {
+                        value: maleCount,
+                        name: 'male'
+                    }
+                ]
+            }]
+        };
+
+        // Display the chart using the configuration items and data just specified.
+        genderChart.setOption(genderOption);
+
+
+
+
+
+
+
+        //Js code  (Top 3 domain)
+
+        var Top3Domain = echarts.init(document.getElementById('top3Domains'));
+
+        var Top3Domain_options = {
+            title: {
+                text: 'Top 3 Domains',
+                top: '5%'
+            },
+            tooltip: {
+                trigger: 'item'
+            },
+            legend: {
+                orient: 'horizontal',
+                bottom: '20%',
+                data: [{
+                        name: '<?php echo $domains[0]; ?>: <?php echo round($counts[0] / array_sum($counts) * 100, 1); ?>%',
+                        icon: 'circle',
+                        itemStyle: {
+                            color: '#6069f3'
+                        },
+                        textStyle: {
+                            rich: {
+                                name: {
+                                    fontSize: 14,
+                                    color: '#333'
+                                },
+                                percent: {
+                                    fontSize: 18,
+                                    fontWeight: 'bold',
+                                    color: '#333'
+                                },
+                                line: {
+                                    fontSize: 14,
+                                    color: '#333',
+                                    padding: [0, 5]
+                                }
+                            },
+                            formatter: '{name|<?php echo $domains[0]; ?>: }{line| |}{percent|<?php echo round($counts[0] / array_sum($counts) * 100, 1); ?>%}'
+                        }
+                    },
+                    {
+                        name: '<?php echo $domains[1]; ?>: <?php echo round($counts[1] / array_sum($counts) * 100, 1); ?>%',
+                        icon: 'circle',
+                        itemStyle: {
+                            color: '#0bbba3'
+                        },
+                        textStyle: {
+                            rich: {
+                                name: {
+                                    fontSize: 14,
+                                    color: '#333'
+                                },
+                                percent: {
+                                    fontSize: 18,
+                                    fontWeight: 'bold',
+                                    color: '#333'
+                                },
+                                line: {
+                                    fontSize: 14,
+                                    color: '#333',
+                                    padding: [0, 5]
+                                }
+                            },
+                            formatter: '{name|<?php echo $domains[1]; ?>: }{line| |}{percent|<?php echo round($counts[1] / array_sum($counts) * 100, 1); ?>%}'
+                        }
+                    },
+                    {
+                        name: '<?php echo $domains[2]; ?>: <?php echo round($counts[2] / array_sum($counts) * 100, 1); ?>%',
+                        icon: 'circle',
+                        itemStyle: {
+                            color: '#fb8d35'
+                        },
+                        textStyle: {
+                            rich: {
+                                name: {
+                                    fontSize: 14,
+                                    color: '#333'
+                                },
+                                percent: {
+                                    fontSize: 18,
+                                    fontWeight: 'bold',
+                                    color: '#333'
+                                },
+                                line: {
+                                    fontSize: 14,
+                                    color: '#333',
+                                    padding: [0, 5]
+                                }
+                            },
+                            formatter: '{name|<?php echo $domains[2]; ?>: }{line| |}{percent|<?php echo round($counts[2] / array_sum($counts) * 100, 1); ?>%}'
+                        }
+                    }
+                ]
+            },
+            series: [{
+                    name: 'domain',
+                    type: 'pie',
+                    radius: ['55%', '80%'],
+                    center: ['50%', '60%'],
+                    startAngle: 180,
+                    endAngle: 360,
+                    data: [{
+                            value: <?php echo $counts[0]; ?>,
+                            name: '<?php echo $domains[0]; ?>: <?php echo round($counts[0] / array_sum($counts) * 100, 1); ?>%',
+                            itemStyle: {
+                                color: '#6069f3',
+                                borderWidth: 2,
+                                borderColor: '#fff'
+                            },
+                            label: {
+                                show: false,
+                                position: 'inside',
+                                formatter: '<?php echo round($counts[0] / array_sum($counts) * 100, 1); ?>%',
+                                fontSize: 14,
+                                color: 'white'
+                            }
+                        },
+                        {
+                            value: <?php echo $counts[1]; ?>,
+                            name: '<?php echo $domains[1]; ?>: <?php echo round($counts[1] / array_sum($counts) * 100, 1); ?>%',
+                            itemStyle: {
+                                color: '#0bbba3',
+                                borderWidth: 2,
+                                borderColor: '#fff'
+                            },
+                            label: {
+                                show: false,
+                                position: 'inside',
+                                formatter: '<?php echo round($counts[1] / array_sum($counts) * 100, 1); ?>%',
+                                fontSize: 14,
+                                color: 'white'
+                            }
+                        },
+                        {
+                            value: <?php echo $counts[2]; ?>,
+                            name: '<?php echo $domains[2]; ?>: <?php echo round($counts[2] / array_sum($counts) * 100, 1); ?>%',
+                            itemStyle: {
+                                color: '#fb8d35',
+                                borderWidth: 2,
+                                borderColor: '#fff'
+                            },
+                            label: {
+                                show: false,
+                                position: 'inside',
+                                formatter: '<?php echo round($counts[2] / array_sum($counts) * 100, 1); ?>%',
+                                fontSize: 14,
+                                color: 'white'
+                            }
+                        },
+                    ],
+                    labelLine: {
+                        show: false
+                    }
+                },
+                {
+                    name: 'Completion Percentage',
+                    type: 'gauge',
+                    center: ['50%', '50%'],
+                    radius: '60%',
+                    startAngle: 180,
+                    endAngle: 0,
+                    splitLine: {
+                        show: false
+                    },
+                    axisTick: {
+                        show: false
+                    },
+                    axisLabel: {
+                        show: false
+                    },
+                    pointer: {
+                        show: false
+                    },
+                    detail: {
+                        formatter: function(value) {
+                            return '{value|' + value + '%}\n\n{label|Total}';
+                        },
+                        rich: {
+                            value: {
+                                fontSize: 40,
+                                fontWeight: 'bold',
+                                color: '#333'
+                            },
+                            label: {
+                                fontSize: 18,
+                                color: '#333',
+                                padding: [10, 0, 0, 0]
+                            }
+                        },
+                        offsetCenter: [0, '10%']
+                    },
+                    data: [{
+                        value: 100
+                    }]
+                }
+            ]
+        };
+
+        Top3Domain.setOption(Top3Domain_options);
+
+
+
+
+
+        // Js code (Years of experience)
+
+        // Pass the data to JavaScript
+        var data_0_2 = <?php echo $data10['0-2'] ?>;
+        var data_3_4 = <?php echo $data10['3-4'] ?>;
+        var data_5_10 = <?php echo $data10['5-10'] ?>;
+        var data_10_plus = <?php echo $data10['10+'] ?>;
+
+        // Initialize the chart
+        var LearnersexperienceLevel = echarts.init(document.getElementById('Learners experience Level'));
+
+        var LearnersexperienceLevel_options = {
+            title: {
+                text: 'Learners experience Level',
+                textStyle: {
+                    fontSize: 16,
+                    fontWeight: 'bold'
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: ["0-2", "3-4", "5-10", "10+"],
+                axisLabel: {
+                    rotate: 45,
+                    margin: 10,
+                    textStyle: {
+                        fontSize: 12
+                    }
+                },
+                axisTick: {
+                    alignWithLabel: true
+                },
+                name: 'Years of Experience',
+                nameLocation: 'middle',
+                nameGap: 25,
+                nameTextStyle: {
+                    fontSize: 14,
+                    fontWeight: 'bold'
+                }
+            },
+            yAxis: {
+                type: 'value',
+                name: 'Number of Learners',
+                nameLocation: 'middle',
+                nameGap: 55,
+                nameTextStyle: {
+                    fontSize: 14,
+                    fontWeight: 'bold'
+                },
+                axisLabel: {
+                    formatter: '{value}',
+                    margin: 10,
+                    textStyle: {
+                        fontSize: 12
+                    }
+                }
+            },
+            grid: {
+                top: 80,
+                left: '5%',
+                right: '5%',
+                bottom: '8%',
+                containLabel: true
+            },
+            series: [{
+                name: 'Learners',
+                data: [{
+                        value: data_0_2,
+                        itemStyle: {
+                            color: '#fd8d35'
+                        }
+                    },
+                    {
+                        value: data_3_4,
+                        itemStyle: {
+                            color: '#fd8d35'
+                        }
+                    },
+                    {
+                        value: data_5_10,
+                        itemStyle: {
+                            color: '#fd8d35'
+                        }
+                    },
+                    {
+                        value: data_10_plus,
+                        itemStyle: {
+                            color: '#fd8d35'
+                        }
+                    }
+                ],
+                type: 'bar',
+                barWidth: '60%',
+                itemStyle: {
+                    barBorderRadius: [5, 5, 0, 0]
+                }
+            }]
+        };
+
+        // Display the chart using the configuration items and data just specified.
+        LearnersexperienceLevel.setOption(LearnersexperienceLevel_options);
+
+
+        //Js code (Month wise active learners)
+
+        var MonthWiseActiveLearners = echarts.init(document.getElementById('Month Wise Active Learners'));
+
+        // Set up the chart options
+        var MonthWiseActiveLearners_options = {
+            title: {
+                text: 'Month Wise Active Learners',
+                left: 'left',
+                top: 20,
+                textStyle: {
+                    fontSize: 18,
+                    fontWeight: 'bold'
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: <?php echo json_encode($month5Data); ?>
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: <?php echo json_encode($activeLearnersData); ?>,
+                type: 'bar',
+                barWidth: '30%',
+                itemStyle: {
+                    color: '#6169f2',
+                    borderRadius: [10, 10, 0, 0] // Set the border radius of the bars (top-left, top-right, bottom-right, bottom-left)
+                }
+            }],
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            }
+        };
+
+        MonthWiseActiveLearners.setOption(MonthWiseActiveLearners_options);
+
+        //Js code (Month wise regestration)
+        var MonthWiseLearnerRegistration = echarts.init(document.getElementById('Month Wise Learner Registration'));
+
+        // Set up the chart options
+        var MonthWiseLearnerRegistration_Options = {
+            title: {
+                text: 'Month Wise Learner Registration',
+                left: 'left',
+                top: 20,
+                textStyle: {
+                    fontSize: 18,
+                    fontWeight: 'bold'
+                }
+            },
+            xAxis: {
+                type: 'category',
+                data: <?php echo json_encode($monthlyData); ?>
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [{
+                data: <?php echo json_encode($RegistrationData); ?>,
+                type: 'bar',
+                barWidth: '30%',
+                itemStyle: {
+                    color: '#0abca4'
+                }
+            }],
+            grid: {
+                left: '3%',
+                right: '4%',
+                bottom: '3%',
+                containLabel: true
+            }
+        };
+
+        MonthWiseLearnerRegistration.setOption(MonthWiseLearnerRegistration_Options);
+    </script>
+
+
+
+
+
+
+
+
 
 </body>
+
+</html>
