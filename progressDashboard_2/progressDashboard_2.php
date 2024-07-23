@@ -10,13 +10,10 @@
 include 'dbConnection.php';
 include 'fetchKPIs.php';
 
-
-// for education details chart 
+// for education details (chart 1)
 $query = "SELECT educational_level, COUNT(*) as count FROM learner GROUP BY educational_level";
 $result = mysqli_query($conn, $query);
-// $result = $conn->query($result);
-
-// Prepare data for the chart
+// Prepare data for the chart 1
 $data2 = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $data2[] = [
@@ -24,45 +21,47 @@ while ($row = mysqli_fetch_assoc($result)) {
         'name' => $row['educational_level']
     ];
 }
+//for chart 2 MoE
+$sql = "SELECT
+    MONTH(enrolment_date) AS month,
+    COUNT(CASE WHEN status = 'completed' THEN 1 END) AS completed_count,
+    COUNT(CASE WHEN status = 'enrolled' THEN 1 END) AS enrolled_count
+FROM
+    course
+JOIN
+    learner ON course.user_id = learner.user_id
+WHERE
+    learner.Domain = 'MoE'
+GROUP BY
+    MONTH(enrolment_date)
+ORDER BY
+    month;
+";
 
-// Query to get the enrolled count per month for MOE domain
-$sql_enrolled = "SELECT MONTH(Course.enrolment_date) AS month, COUNT(Course.user_id) AS enrolled_count
-                 FROM Course
-                 JOIN Learner ON Course.user_id = Learner.user_id
-                 WHERE Learner.Domain = 'MoE'
-                 GROUP BY MONTH(Course.enrolment_date)";
+$result = $conn->query($sql);
 
-// $result_enrolled = mysqli_query($con, $sql_enrolled);
-$result_enrolled = $conn->query($sql_enrolled);
+$completedData = [];
+$enrolledData = [];
+$months = array_fill(1, 12, 0);
 
-$enrolledData = array_fill(0, 12, 0); // Initialize an array with 12 zeros
-
-if ($result_enrolled->num_rows > 0) {
-    while($row_enrolled = $result_enrolled->fetch_assoc()) {
-        $enrolledData[$row_enrolled['month'] - 1] = $row_enrolled['enrolled_count'];
+if ($result->num_rows > 0) {
+    while($row = $result->fetch_assoc()) {
+        $month = (int)$row["month"];
+        $completedData[$month] = (int)$row["completed_count"];
+        $enrolledData[$month] = (int)$row["enrolled_count"];
     }
 }
 
-// Query to get the completed count per month for MoE domain
-$sql_completed = "SELECT MONTH(Course.completion_date) AS month, COUNT(Course.user_id) AS completed_count
-                  FROM Course
-                  JOIN Learner ON Course.user_id = Learner.user_id
-                  WHERE Learner.Domain = 'MoE'
-                  GROUP BY MONTH(Course.completion_date)";
-
-// $result_completed = mysqli_query($con, $sql_completed);
-$result_completed = $conn->query($sql_completed);
-
-$completionData = array_fill(0, 12, 0); // Initialize an array with 12 zeros
-
-if ($result_completed->num_rows > 0) {
-    while($row_completed = $result_completed->fetch_assoc()) {
-        $completionData[$row_completed['month'] - 1] = $row_completed['completed_count'];
+// Fill in any missing months with zeros
+for ($i = 1; $i <= 12; $i++) {
+    if (!isset($completedData[$i])) {
+        $completedData[$i] = 0;
+    }
+    if (!isset($enrolledData[$i])) {
+        $enrolledData[$i] = 0;
     }
 }
-
-
-// Query to fetch data from learner table
+// Query to fetch data from learner table (chart 3)
 $query1 = "SELECT city, COUNT(*) AS people_count FROM learner GROUP BY city;";
 $result1= mysqli_query($conn, $query1);
 while ($row = mysqli_fetch_assoc($result1)) {
@@ -73,10 +72,9 @@ while ($row = mysqli_fetch_assoc($result1)) {
     ];
 }
 
-//For table city
+//For table city (chart 5)
 $res = mysqli_query($conn, "SELECT city, COUNT(*) AS count FROM learner GROUP BY city ORDER BY count DESC;");
-
-// for table MoE 
+// for table MoE (chart6)
 $res2 = mysqli_query($conn, " SELECT subdomain, COUNT(*) AS subdomain_count FROM Learner WHERE Domain = 'MoE' GROUP BY subdomain ORDER BY subdomain_count DESC;");
 
 mysqli_close($conn);
@@ -344,12 +342,11 @@ mysqli_close($conn);
         });
     </script>
 
-     <script>
-        // Initialize ECharts instance
+<!-- for chart2 MoE-->
+<script type="text/javascript">
         var enrollmentCompletionChartDom = document.getElementById('main1');
         var enrollmentCompletionChart = echarts.init(enrollmentCompletionChartDom);
 
-        // Option for MoE Enrolled vs Completion Chart
         var enrollmentCompletionOption = {
             title: {
                 text: 'MoE Enrolled V/s Completion'
@@ -373,7 +370,7 @@ mysqli_close($conn);
             xAxis: [
                 {
                     type: 'category',
-                    data: <?php echo json_encode($months); ?> // Dynamically fetched from PHP
+                    data: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
                 }
             ],
             yAxis: [
@@ -385,19 +382,19 @@ mysqli_close($conn);
                 {
                     name: 'Enrolled',
                     type: 'bar',
-                    data: <?php echo json_encode($enrolledData); ?> // Dynamically fetched from PHP
+                    data: [<?php echo implode(', ', $enrolledData); ?>]
                 },
                 {
                     name: 'Completion',
                     type: 'bar',
-                    data: <?php echo json_encode($completionData); ?> // Dynamically fetched from PHP
+                    data: [<?php echo implode(', ', $completedData); ?>]
                 }
             ]
         };
 
-        // Set the option to the chart instance
         enrollmentCompletionChart.setOption(enrollmentCompletionOption);
     </script>
+
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
             var accessFromChartDom = document.getElementById('main2');
