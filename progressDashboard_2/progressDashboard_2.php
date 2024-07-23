@@ -4,11 +4,10 @@
     <link rel="stylesheet" type="text/css" href="progressDashboard_2.css">
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.1/dist/echarts.min.js"></script>
 </head>
-
 <body>
 <?php
-include 'dbConnection.php';
-include 'fetchKPIs.php';
+include '../dbConnection.php';
+include '../fetchKPIs.php';
 
 // for education details (chart 1)
 $query = "SELECT educational_level, COUNT(*) as count FROM learner GROUP BY educational_level";
@@ -63,6 +62,7 @@ for ($i = 1; $i <= 12; $i++) {
         $enrolledData[$i] = 0;
     }
 }
+
 // Query to fetch data from learner table (chart 3)
 $query1 = "SELECT city, COUNT(*) AS people_count FROM learner GROUP BY city;";
 $result1= mysqli_query($conn, $query1);
@@ -344,7 +344,7 @@ mysqli_close($conn);
         });
     </script>
 
-<!-- for chart2 MoE-->
+<!-- for chart2 MoE -->
 <script type="text/javascript">
         var enrollmentCompletionChartDom = document.getElementById('main1');
         var enrollmentCompletionChart = echarts.init(enrollmentCompletionChartDom);
@@ -396,6 +396,8 @@ mysqli_close($conn);
 
         enrollmentCompletionChart.setOption(enrollmentCompletionOption);
     </script>
+   <!--  -->
+
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {

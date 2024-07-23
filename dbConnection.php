@@ -1,10 +1,11 @@
 <?php
 $servername = "localhost";
 $username = "root";
-$password = "root"; 
+$password = ""; 
 $dbname = "SDAIA_Academy_DashboardDB";
+$port = 3307;
+$conn = new mysqli($servername, $username, $password, $dbname,$port);
 
-$conn = new mysqli($servername, $username, $password, $dbname);
 
 if ($conn->connect_error) {
 
