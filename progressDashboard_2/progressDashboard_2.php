@@ -13,7 +13,9 @@ include 'fetchKPIs.php';
 // for education details (chart 1)
 $query = "SELECT educational_level, COUNT(*) as count FROM learner GROUP BY educational_level";
 $result = mysqli_query($conn, $query);
-// Prepare data for the chart 1
+// $result = $conn->query($result);
+
+// Prepare data for the chart
 $data2 = [];
 while ($row = mysqli_fetch_assoc($result)) {
     $data2[] = [
